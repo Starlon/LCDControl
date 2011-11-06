@@ -3,7 +3,7 @@
         "foo": 220
     },
     "display_cfa635": {
-        "driver": "crystalfontz",
+        //"driver": "crystalfontz",
         "backlight": 100,
         "contrast": 60,
         "layout-timeout": 0,
@@ -19,7 +19,7 @@
     },
 
     "display_cfa635_2": {
-        "driver": "crystalfontz",
+        //"driver": "crystalfontz",
         "backlight": 100,
         "contrast": 60,
         "layout-timeout": 6000,
@@ -40,7 +40,7 @@
     },
 
     "display_cfa533": {
-        "driver": "crystalfontz",
+        //"driver": "crystalfontz",
         "backlight": 100, 
         "contrast": 15, 
         "layout0": "layout_2x16", 
@@ -52,7 +52,7 @@
     },
 
     "display_cfa634": {
-        "driver": "crystalfontz",
+        //"driver": "crystalfontz",
         "backlight": 100, 
         "contrast": 50, 
         "layout-timeout": 5000,
@@ -120,14 +120,19 @@
         "widget1": "widget_key_down"
     },
     "display_pico_graphic": {
-        //"driver": "picographic", 
-        //"gif-file": "qtgraphic.gif",
-        //"layout-timeout": 20000,
-        "layout0": "layout_full_256x64",
-        //"layout1": "layout_bignums",
-        "transition-speed": 10,
+        "driver": "picographic", 
+        "layout-timeout": 5000,
+        "layout1": "layout_full_256x64",
+        "layout0": "layout_blank",
+        "transition-speed": 0,
+        "transitions_off": true,
+        "clear_on_layout_change": false,
         "rows": 64,
-        "cols": 256
+        "cols": 256,
+	"layers": 3,
+        "widget0": "widget_key_up",
+        "widget1": "widget_key_down",
+	"widget2": "widget_netstat_script"
     }, 
     "display_sdl": {
         //"driver": "sdl",
@@ -256,7 +261,6 @@
         "transition": "U"
     },
     "layout_blank": {
-        "keyless": 0,
         "layout-timeout": 0
     },
     "layout_xmms2_pcm_256x64": {
