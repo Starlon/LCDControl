@@ -182,7 +182,7 @@ PluginLCD::PluginLCD(LCDCore *visitor) {
         this, SIGNAL(_KeypadEvent(const int)));
 
     tick_timer_ = new QTimer();
-    tick_timer_->setInterval(100);
+    tick_timer_->setInterval(500);
     QObject::connect(tick_timer_, SIGNAL(timeout()),
         this, SLOT(TickUpdate()));
     tick_timer_->start();

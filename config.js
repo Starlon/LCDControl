@@ -2,33 +2,16 @@
     "variables": {
         "foo": 220
     },
-    /*"display_cfa635": {
-        "driver": "crystalfontz",
-        "backlight": 100, 
-        "contrast": 50, 
-        "layout": "layout_bar", 
-        "model": "632", 
-        "port": "/dev/ttyUSB0", 
-        "baud": 19200,
-        "rows": 2,
-        "cols": 20
-    },*/ 
     "display_cfa635": {
         "driver": "crystalfontz",
         "backlight": 100,
         "contrast": 60,
-        "layout-timeout": 8000,
-        "layout0": "layout_karo",
-        //"layout2": "layout_american_flag",
-        //"layout3": "layout_intel",
-        //"layout4": "layout_marquee1",
-        //"layout5": "layout_bolt",
-        "layout1": "layout_bar",
-        "layout2": "layout_icons",
-        "layout3": "layout_1",
+        "layout-timeout": 0,
+	"transition-speed": 500,
+	"layout0": "layout_visualization",
         "model": "635+",
         "port": "/dev/ttyUSB2",
-        "transitions_off": false,
+        "transitions_off": true,
         "clear_on_layout_change": false,
         "speed": 115200,
         "widget0": "widget_key_up",
@@ -36,18 +19,17 @@
     },
 
     "display_cfa635_2": {
-        //"driver": "crystalfontz",
+        "driver": "crystalfontz",
         "backlight": 100,
         "contrast": 60,
-        "layout-timeout": 8000,
-        "layout0": "layout_karo",
-        "layout1": "layout_icons",
+        "layout-timeout": 6000,
+	"transition-speed": 100,
+        "layout0": "layout_icons",
+	"layout1": "layout_1",
         "layout2": "layout_american_flag",
-        "layout3": "layout_intel",
+        "layout3": "layout_bar",
         "layout4": "layout_marquee1",
-        "layout5": "layout_bolt",
-        "layout6": "layout_bar",
-        "layout7": "layout_1",
+        "layout5": "layout_bignums",
         "model": "635",
         "port": "/dev/ttyUSB3",
         "transitions_off": false,
@@ -58,30 +40,31 @@
     },
 
     "display_cfa533": {
-        //"driver": "crystalfontz",
+        "driver": "crystalfontz",
         "backlight": 100, 
-        "contrast": 50, 
+        "contrast": 15, 
         "layout0": "layout_2x16", 
         "model": "533", 
-        "port": "/dev/ttyUSB0", 
+        "port": "/dev/ttyUSB1", 
         "baud": 19200, 
         "widget0": "widget_key_up", 
         "widget1": "widget_key_down"
     },
 
     "display_cfa634": {
-        //"driver": "crystalfontz",
+        "driver": "crystalfontz",
         "backlight": 100, 
         "contrast": 50, 
         "layout-timeout": 5000,
-        "layout0": "layout_1",
+        "layout0": "layout_bar",
+	"layout1": "layout_blank",
         "model": "634", 
-        "port": "/dev/ttyUSB1", 
-        "clear_on_layout_change": true,
+        "port": "/dev/ttyUSB4", 
         "transitions-off": true,
         "baud": 19200,
         "rows": 4,
-        "cols": 20
+        "cols": 20,
+        "widget0": "widget_netstat_script"
     },
 
     "display_qt": {
@@ -169,7 +152,12 @@
     },
     "layout_2x16": {
 	"row1": {
-		"col1": "widget_CPU"
+		"col1": "widget_CPULabel",
+		"col5": "widget_CPU"
+	},
+	"row2": {
+		"col1": "widget_page_label",
+		"col11": "widget_page"
 	}
     },
     "layout_histogram_large": {
@@ -268,7 +256,7 @@
         "transition": "U"
     },
     "layout_blank": {
-        "keyless": 1,
+        "keyless": 0,
         "layout-timeout": 0
     },
     "layout_xmms2_pcm_256x64": {
@@ -316,13 +304,13 @@
     }, 
     "layout_visualization": {
         "row1": {
-            "col1": "widget_xmms2_pcm_24x16",
-            "col17": "widget_xmms2_pcm_24x16",
-            "col9": "widget_xmms2_pcm_24x16"
+            "col1": "widget_xmms2_pcm_24x16"
+            //"col17": "widget_xmms2_pcm_24x16",
+            //"col9": "widget_xmms2_pcm_24x16"
         },
         "row3": {
-            "col13": "widget_xmms2_pcm_24x16",
-            "col5": "widget_xmms2_pcm_24x16"
+            //"col13": "widget_xmms2_pcm_24x16",
+            //"col5": "widget_xmms2_pcm_24x16"
         },
         "transition": "B"
     },
@@ -782,19 +770,15 @@
     "plugins": {
         "i2c_sensors-path": "/sys/bus/i2c/devices/1-0028/"
     }, 
-    "widget_nifty1": {
-        "type": "nifty",
-        "height": 64,
-        "width": 256,
-        "update": 50,
-        "port": 8766
+    "widget_page_label": {
+	"type": "text",
+	"length": 10,
+	"expression": "'PAGE FILE:'"
     },
-    "widget_nifty2": {
-        "type": "nifty",
-        "height": 64,
-        "width": 256,
-        "update": 50,
-        "port": 8766
+    "widged_page": {
+	"type": "text",
+	"length": 6,
+	"expression": "procstat.ProcStat('page')"
     },
     "widget_histogram_large": {
         "type": "histogram",
@@ -987,7 +971,7 @@
         "update": 50,
         "morph-timeout": 0,
         "skip-actors": "gstreamer:gdkpixbuf:jakdaw",
-        "actor": "avs",
+        "actor": "oinksie",
         "input": "xmms2",
         "style": "pcm",
         "params": {
@@ -1822,7 +1806,7 @@
         "height": 16,
         "update": 100,
         "style": "pcm",
-        "actor": "avs",
+        "actor": "oinksie",
         "morph-timeout": 0,
         "skip-actors": "gstreamer:gdkpixbuf:jakdaw"
     },

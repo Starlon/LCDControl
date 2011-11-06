@@ -571,6 +571,7 @@ void TextVisualizationPeakDraw(WidgetVisualization *widget) {
 
 void TextVisualizationPCMDraw(WidgetVisualization *widget) {
     LCDText *lcdText = (LCDText *)widget->GetVisitor()->GetLCD();
+LCDError("hahaha------------------------");
 
     int row = widget->GetRow();
     int col = widget->GetCol();
@@ -614,10 +615,16 @@ void TextVisualizationPCMDraw(WidgetVisualization *widget) {
         }
     }
 
+    if(ch[0])
     for(int i = 0; i < 
         (height / lcdText->YRES) * (width / lcdText->XRES); i++ ){
             lcdText->special_chars[ch[i]] = tmp[i];
             lcdText->TextSpecialCharChanged(ch[i]);
+    }
+    else 
+    {
+	LCDError("No special characters allocated.");
+        return; 
     }
 
    int n = 0;

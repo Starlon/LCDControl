@@ -401,6 +401,7 @@ bool WidgetVisualization::ErrorHandler(const std::string &function,
 }
 
 void WidgetVisualization::SetupChars() {
+LCDError("SetupChars");
     ch_.clear();
     LCDText *lcd = (LCDText *)visitor_->GetLCD();
 
@@ -413,6 +414,7 @@ void WidgetVisualization::SetupChars() {
         size = 2;
 
 
+/*
     if(style_ == STYLE_PCM) {
         std::map<std::string, Widget *> widgets1;
         std::map<std::string, Widget *> widgets2;
@@ -430,11 +432,12 @@ void WidgetVisualization::SetupChars() {
             }
         }
     }
+*/
 
-    if( (int)lcd->special_chars.size() >= lcd->CHARS - size - 1) {
+    if( (int)lcd->special_chars.size() >= lcd->CHARS - size) {
         update_ = -1;
-        LCDError("Widget %s - unable to allocate special chars", 
-            name_.c_str());
+        LCDError("Widget %s - unable to allocate special chars. CHARS: %d, chars_cache: %d, size: %d", 
+            name_.c_str(), lcd->CHARS, lcd->special_chars.size(), size);
         return;
     }
 
@@ -445,6 +448,7 @@ void WidgetVisualization::SetupChars() {
             lcd->special_chars.push_back(SpecialChar(lcd->YRES));
 
         ch_[c] = lcd->special_chars.size() - 1;
+        lcd->TextSpecialCharChanged(ch_[c]);
     }
 
     has_chars_ = true;
