@@ -3,19 +3,25 @@
         "foo": 220
     },
     "display_cfa635": {
-        //"driver": "crystalfontz",
+        "driver": "crystalfontz",
         "backlight": 100,
         "contrast": 60,
         "layout-timeout": 0,
 	"transition-speed": 500,
-	"layout0": "layout_visualization",
+        "layout0": "layout_1",
+	/*"layout1": "layout_icons",
+        "layout2": "layout_american_flag",
+        "layout3": "layout_bar",
+        "layout4": "layout_marquee1",
+        "layout5": "layout_bignums",
+	"layout6": "layout_bolt",*/
         "model": "635+",
-        "port": "/dev/ttyUSB2",
+        "port": "/dev/ttyUSB0",
         "transitions_off": true,
         "clear_on_layout_change": false,
-        "speed": 115200,
-        "widget0": "widget_key_up",
-        "widget1": "widget_key_down"
+        "speed": 115200
+        //"widget0": "widget_key_up",
+        //"widget1": "widget_key_down"
     },
 
     "display_cfa635_2": {
@@ -59,7 +65,7 @@
         "layout0": "layout_bar",
 	"layout1": "layout_blank",
         "model": "634", 
-        "port": "/dev/ttyUSB4", 
+        "port": "/dev/ttyUSB0", 
         "transitions-off": true,
         "baud": 19200,
         "rows": 4,
@@ -120,7 +126,7 @@
         "widget1": "widget_key_down"
     },
     "display_pico_graphic": {
-        "driver": "picographic", 
+        //"driver": "picographic", 
         "layout-timeout": 5000,
         "layout1": "layout_full_256x64",
         "layout0": "layout_blank",
@@ -136,14 +142,14 @@
     }, 
     "display_sdl": {
         //"driver": "sdl",
-        //"gif-file": "avs_lcd.gif",
+        "gif-file": "avs_lcd.gif",
         "gif-speed": 80,
         "pixels": "3x3",
         "layers": 3,
         "background": "d9ccf16f",
         "fill": 1,
         "rows": 64,
-        "cols": 356,
+        "cols": 256,
         "layout-timeout": 0,
         "update": 25,
         "widget0": "widget_key_up",
@@ -975,7 +981,7 @@
         "update": 50,
         "morph-timeout": 0,
         "skip-actors": "gstreamer:gdkpixbuf:jakdaw",
-        "actor": "oinksie",
+        "actor": "flower",
         "input": "xmms2",
         "style": "pcm",
         "params": {
@@ -1910,7 +1916,7 @@
         "inverted": 1
     }, 
     "widget_gif_bolt": {
-        "file": "gifs/lightning_bolt-ani.gif", 
+        "file": "gifs/lightning_bolt_ani.gif", 
         "type": "gif", 
         "update": "250",
         "inverted": 1

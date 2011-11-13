@@ -57,7 +57,7 @@ LCDControl::~LCDControl() {
 
 int LCDControl::Start() {
     CFG_Init("config.js");
-    XInitThreads();
+    //XInitThreads();
     ConfigSetup();
     return app_->exec();
 }

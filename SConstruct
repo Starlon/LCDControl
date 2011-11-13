@@ -30,7 +30,7 @@ magickCflags, magickCflagse = subprocess.Popen(["Magick++-config", "--cppflags"]
 xmms2Cflags, xmms2Cflagse = subprocess.Popen(["pkg-config", "--cflags", "xmms2-client-cpp"],
 	stderr=subprocess.PIPE, stdout=subprocess.PIPE).communicate()
 
-visualCflags, visualCflagse = subprocess.Popen(["pkg-config", "--cflags", "libvisual-0.4"],
+visualCflags, visualCflagse = subprocess.Popen(["pkg-config", "--cflags", "libvisual-0.5"],
 	stderr=subprocess.PIPE, stdout=subprocess.PIPE).communicate()
 
 sdlCflags, sdlCflagse = subprocess.Popen(["pkg-config", "--cflags", "sdl"],
@@ -63,7 +63,7 @@ print "Hmm " + magickLdflags
 xmms2Ldflags, xmms2Ldflagse = subprocess.Popen(["pkg-config", "--libs", "xmms2-client-cpp"],
 	stderr=subprocess.PIPE, stdout=subprocess.PIPE).communicate()
 
-visualLdflags, visualLdflagse = subprocess.Popen(["pkg-config", "--libs", "libvisual-0.4"],
+visualLdflags, visualLdflagse = subprocess.Popen(["pkg-config", "--libs", "libvisual-0.5"],
 	stderr=subprocess.PIPE, stdout=subprocess.PIPE).communicate()
 
 sdlLdflags, sdlLdflagse = subprocess.Popen(["pkg-config", "--libs", "sdl"],

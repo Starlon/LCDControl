@@ -86,7 +86,7 @@ const char *command_names[36] = {
 #define TYPE_WRITE_FLASH_AREA     0x02
 #define TYPE_READ_FLASH_AREA      0x03
 #define TYPE_STORE_AS_BOOT        0x04
-#define TYPE_POWER_CONTROL        0x05
+#define TYPE_POWER_CONTROL        0x05 //reboot
 #define TYPE_CLEAR_SCREEN         0x06
     /*  DEPRECATED                0x07 */
     /*  DEPRECATED                0x08 */
@@ -288,9 +288,9 @@ CFPacketVersion::~CFPacketVersion() {
 }
 
 void CFPacketVersion::Update() {
-    CommandWorker();
     FillBuffer();
     CheckPacket();
+    CommandWorker();
 }
 
 void CFPacketVersion::CommandWorker() {
@@ -323,14 +323,8 @@ void CFPacketVersion::CFGSetup() {
 }
 
 void CFPacketVersion::SetupDevice() {
-    //command_timer_->setInterval(transfer_rate_);
-    //check_timer_->setInterval(transfer_rate_);
-    //fill_timer_->setInterval(transfer_rate_);
     update_timer_->setInterval(transfer_rate_);
     update_timer_->start();
-    //command_timer_->start();
-    //check_timer_->start();
-    //fill_timer_->start();
     watch_timer_->start();
 
     InitiateVersion();
@@ -346,11 +340,8 @@ void CFPacketVersion::Connect() {
 }
 
 void CFPacketVersion::TakeDown() {
-    Reboot(NULL, true);
+    Reboot(true);
     update_timer_->stop();
-    //command_timer_->stop();
-    //check_timer_->stop();
-    //fill_timer_->stop();
     watch_timer_->stop();
     SerialClose();
 }
@@ -428,15 +419,17 @@ void CFPacketVersion::SendCommand( Command *cmd, CFCallback *cb,
         void operator()(void *data) {
             int i;
             int crc_value = visitor_->GetCrc(cmd_);
-            unsigned char buf[cmd_->GetDataLength() + 4];
+            unsigned char buf[cmd_->GetDataLength() + 4 + 1];
             buf[0] = (char)cmd_->GetCommand();
             buf[1] = (char)cmd_->GetDataLength();
             for(i = 0; i < cmd_->GetDataLength(); i++)
                 buf[i+2] = cmd_->GetData()[i];
             buf[i+2] = (char)(crc_value & 0xFF);
             buf[i+3] = (char)((crc_value>>8)&0xFF);
+            buf[i+4] = 0x00;
             visitor_->SerialWrite(buf, cmd_->GetDataLength() + 4);
             visitor_->BinAdd(cmd_, cb_, priority_, send_now_);
+            LCDError("SerialWrite %s\n", command_names[buf[0]]);
         }
     };
     SendCommandCB *callback = new SendCommandCB(this, cmd, cb, 
@@ -558,8 +551,8 @@ void CFPacketVersion::FillBuffer() {
 }
 
 void CFPacketVersion::PacketReady(Packet *packet) {
-    //LCDError("Incoming packet: Command: %s",
-    //    command_names[packet->GetCommand() & 0x3F]);
+    LCDError("Incoming packet: Command: %s",
+        command_names[packet->GetCommand() & 0x3F]);
     BinProcessPacket(packet);
     delete packet;
 }
@@ -612,6 +605,7 @@ void CFPacketVersion::BinProcessPacket(Packet *pkt) {
                 int command = current_command_ | 0x40;
                 if(bin_dict_.find(command) != bin_dict_.end() &&
                     (command | 0x40) == 74 ) {
+                    // process read memory packet
                     /*for(int i = 0; i < bin_current_memory_.size(); i++) {
                         if(bin_current_memory_[i] != command)
                             continue;
@@ -1016,16 +1010,34 @@ Protocol2::~Protocol2() {
     delete model_;
 }
 
+//0 Ping command
 void Protocol2::Ping(std::string msg, CFCallback *cb) {
     Command *cmd = new Command(0, (unsigned char*)strdup(msg.c_str()), msg.size());
     SendCommand(cmd, cb);
 }
 
+//1 Get hardware and firmware version.
 void Protocol2::GetVersion(CFCallback *cb) {
     SendCommand(new Command(1), cb);
 }
 
-void Protocol2::Reboot(CFCallback *cb, bool send_now) {
+//2 Write User flash area
+void Protocol2::WriteUserFlash(unsigned char bytes[16]) {
+
+}
+
+//3 Read user flash area
+void Protocol2::ReadUserFlash(CFCallback *cb) {
+
+}
+
+//4 Store current state as boot state
+void Protocol2::SaveAsBootState() {
+
+}
+
+//5 Reboot CFA, Reset Host, or Power Off Host
+void Protocol2::Reboot(bool send_now, CFCallback *cb) {
     unsigned char *buff = (unsigned char *)malloc(3);
     buff[0] = 8;
     buff[1] = 18;
@@ -1033,20 +1045,32 @@ void Protocol2::Reboot(CFCallback *cb, bool send_now) {
     SendCommand(new Command(5, buff, 3), cb, 0, send_now);
 }
 
+//5
+void Protocol2::Reset(bool send_now, CFCallback *cb) {
+
+}
+
+//5
+void Protocol2::PowerOff(bool send_now, CFCallback *cb) {
+
+}
+
+//6 Clear LCD Screen
 void Protocol2::ClearLCD() {
     SendCommand(new Command(6));
 }
 
-void Protocol2::SendData(int row, int col, unsigned char *data, 
-    int len, bool send_now) {
-    unsigned char *buff = (unsigned char *)malloc(len + 2);
-    buff[0] = (char)col;
-    buff[1] = (char)row;
-    for(int i = 0; i < len; i++ )
-        buff[i+2] = data[i];
-    SendCommand(new Command(31, buff, len+2));
+//7 
+void Protocol2::SetLine1(unsigned char *buff) {
+	
 }
 
+//8
+void Protocol2::SetLine2(unsigned char *buff) {
+
+}
+
+//9
 void Protocol2::SetSpecialChar(int num, SpecialChar ch) {
     unsigned char *buff = (unsigned char *)malloc(ch.Size() + 1);
     buff[0] = num;
@@ -1055,7 +1079,19 @@ void Protocol2::SetSpecialChar(int num, SpecialChar ch) {
     SendCommand(new Command(9, buff, ch.Size() + 1));
 }
 
-void Protocol2::SetLCDCursorStyle(int style, CFCallback *cb) {
+//10 Read 8 bytes of LCD memory
+
+void Protocol2::ReadLCDMemory(CFCallback *cb) {
+
+}
+
+//11 Set LCD Cursor Position
+void Protocol2::SetLCDCursorPos(int col, int row) {
+
+}
+
+//12 SetLCDCursorStyle
+void Protocol2::SetLCDCursorStyle(int style) {
     if(style < 0 || style > 4 )
         return;
     unsigned char *buff = (unsigned char *)malloc(1);
@@ -1063,6 +1099,7 @@ void Protocol2::SetLCDCursorStyle(int style, CFCallback *cb) {
     SendCommand(new Command(12, buff, 1));
 }
 
+//13 Set LCD Contrast
 void Protocol2::SetLCDContrast(int level) {
     if( level < 0 )
         level = 0;
@@ -1073,6 +1110,7 @@ void Protocol2::SetLCDContrast(int level) {
     SendCommand(new Command(13, buff, 1));
 }
 
+//14 Set LCD & Keypad backlight
 void Protocol2::SetLCDBacklight(int level) {
     if( level < 0 )
         level = 0;
@@ -1083,6 +1121,17 @@ void Protocol2::SetLCDBacklight(int level) {
     SendCommand(new Command(14, buff, 1));
 }
 
+//15 -- deprecated
+void Protocol2::ReadFans(CFCallback *cb) {
+
+}
+
+//16 Setup fan reporting
+void Protocol2::SetFanReporting(int fan, int val) {
+
+}
+
+//17 Set Fan Power
 void Protocol2::SetFanPower(int num, int val) {
     if( val < 0 )
         val = 0;
@@ -1095,6 +1144,82 @@ void Protocol2::SetFanPower(int num, int val) {
     SendCommand(new Command(17, buff, 4)); 
 }
 
+//18 Read DOW device information
+void Protocol2::ReadDOWInformation(int index, CFCallback *cb) {
+
+}
+
+//19 Setup temperature reporting
+void Protocol2::SetTempReporting(int index, int val) {
+}
+
+//20 Arbitrary DOW transaction
+void Protocol2::DOWTransaction() {
+}
+
+//21 Setup live fan or temperature display
+void Protocol2::SetLiveDisplay() {
+}
+
+//22 send command directly to the LCD controller
+void Protocol2::DirectLCDCommand() {
+
+}
+
+//23 configure key reporting
+void Protocol2::SetKeyReporting() {
+
+}
+
+//24 read keypad, polled mode
+void Protocol2::ReadKeypadPolledMode() {
+
+}
+
+//25 set fan power fail-safe
+void Protocol2::SetFanPwrFailSafe(int fan, int timeout) {
+}
+
+//26 set fan tachometer glitch filter
+void Protocol2::SetFanTachGlitchFilter(int fan1, int fan2, int fan3, int fan4) {
+}
+
+//27 query fan power & fail-safe mask
+void Protocol2::ReadFanPwrFailSafe(CFCallback *cb) {
+}
+
+//28 Set ATX power switch functionality
+void Protocol2::SetATXSwitch() {
+}
+
+//29 Enable/Disable and Reset the Watchdog
+void Protocol2::WatchdogHostReset() {
+}
+
+//30 Read and Reporting status
+void Protocol2::ReadReport() {
+}
+
+//31 Send data to LCD
+void Protocol2::SendData(int row, int col, unsigned char *data, 
+    int len, bool send_now) {
+    unsigned char *buff = (unsigned char *)malloc(len + 2);
+    buff[0] = (char)col;
+    buff[1] = (char)row;
+    for(int i = 0; i < len; i++ )
+        buff[i+2] = data[i];
+    SendCommand(new Command(31, buff, len+2));
+}
+
+//32 Reserved for CFA631 Key Legends
+void Protocol2::KeyLegends() {}
+
+//33 Set Baud rate
+void Protocol2::SetBaudRate(int baud_rate) {
+
+}
+
+//34 Set or set and configure GPIO pins
 void Protocol2::SetGPIO(int num, int val) {
     if( val < 0 )
         val = 0;
@@ -1104,6 +1229,11 @@ void Protocol2::SetGPIO(int num, int val) {
     buff[0] = num;
     buff[1] = val;
     SendCommand(new Command(34, buff, 2));
+}
+
+//35 Read GPIO pin levels and configuration state
+void Protocol2::ReadGPIO(CFCallback *cb) {
+
 }
 
 // Protocol 3
@@ -1120,76 +1250,131 @@ Protocol3::Protocol3(std::string name, Model *model, LCDControl *v,
 Protocol3::~Protocol3() {
     delete model_;
 }
+ 
+//0 Ping LCD device
 void Protocol3::Ping(std::string msg, CFCallback *cb) {
-    Command *cmd = new Command(0, 
+    Command *cmd = new Command(TYPE_PING, 
         (unsigned char*)strdup(msg.c_str()), msg.size());
     SendCommand(cmd, cb);
 }
 
+//1 Get hardware and firmware version
 void Protocol3::GetVersion(CFCallback *cb) {
-    SendCommand(new Command(1), cb);
+    SendCommand(new Command(TYPE_GET_VERSION_INFO), cb);
 }
 
-void Protocol3::Reboot(CFCallback *cb, bool send_now) {
+//2 Write user flash area
+void Protocol3::WriteUserFlash(unsigned char bytes[16]) {
+	unsigned char *buff = (unsigned char *)malloc(16);
+	for(int i = 0; i < 16; i++) buff[i] = bytes[i];
+	SendCommand(new Command(TYPE_WRITE_FLASH_AREA, buff, 16));;
+}
+
+//3 Read user flash area
+void Protocol3::ReadUserFlash(CFCallback *cb) {
+	SendCommand(new Command(TYPE_READ_FLASH_AREA), cb);
+}
+
+//4 Store current state as boot state
+void Protocol3::SaveAsBootState() {
+//TYPE_STORE_AS_BOOT
+}
+
+//5 Reboot CFA, Reset Host, or Power off Host
+void Protocol3::Reboot(bool send_now, CFCallback *cb) {
     unsigned char *buff = (unsigned char *)malloc(3);
     buff[0] = 8;
     buff[1] = 18;
     buff[2] = 99;
-    SendCommand(new Command(5, buff, 3), cb, 0, send_now);
+    SendCommand(new Command(TYPE_POWER_CONTROL, buff, 3), cb, 0, send_now);
 }
 
+//5
+//5 Reboot CFA, Reset Host, or Power off Host
+void Protocol3::Reset(bool send_now, CFCallback *cb) {
+    unsigned char *buff = (unsigned char *)malloc(3);
+    buff[0] = 12;
+    buff[1] = 28;
+    buff[2] = 97;
+    SendCommand(new Command(TYPE_POWER_CONTROL, buff, 3), cb, 0, send_now);
+}
+
+//5 Reboot CFA, Reset Host, or Power off Host
+void Protocol3::PowerOff(bool send_now, CFCallback *cb) {
+    unsigned char *buff = (unsigned char *)malloc(3);
+    buff[0] = 3;
+    buff[1] = 11;
+    buff[2] = 95;
+    SendCommand(new Command(TYPE_POWER_CONTROL, buff, 3), cb, 0, send_now);
+}
+
+//6 Clear LCD Screen
 void Protocol3::ClearLCD() {
-    SendCommand(new Command(6));
+    SendCommand(new Command(TYPE_CLEAR_SCREEN));
 }
 
-void Protocol3::SendData(int row, int col, unsigned char *data, 
-    int len, bool send_now) {
-    unsigned char *buff = (unsigned char *)malloc(len + 2);
-    buff[0] = (char)col;
-    buff[1] = (char)row;
-    for(int i = 0; i < len; i++ )
-        buff[i+2] = data[i];
-    SendCommand(new Command(31, buff, len+2));
-}
+// 7 deprecated
+// 8 deprecated
 
+//9 Set LCD Special character data
 void Protocol3::SetSpecialChar(int num, SpecialChar ch) {
     unsigned char *buff = (unsigned char *)malloc(ch.Size() + 1);
     buff[0] = num;
     for(int i = 0; i < ch.Size(); i++ )
         buff[i + 1] = ch[i];
-    SendCommand(new Command(9, buff, ch.Size() + 1));
+    SendCommand(new Command(TYPE_SET_CHAR_DATA, buff, ch.Size() + 1));
 }
 
-void Protocol3::SetLCDCursorStyle(int style, CFCallback *cb) {
+
+//10 Read 8 Bytes of LCD Memory
+void Protocol3::ReadLCDMemory(CFCallback *cb) { // 10
+//TYPE_READ_LCD_MEMORY
+}
+
+//11 Set LCD Cursor Position
+void Protocol3::SetLCDCursorPos(int col, int row) { // 11
+//TYPE_SET_CURSOR_POS
+}
+
+//12 Set LCD Cursor Style
+void Protocol3::SetLCDCursorStyle(int style) {
     if(style < 0 || style > 4 )
         return;
     unsigned char *buff = (unsigned char *)malloc(1);
     buff[0] = style;
-    SendCommand(new Command(12, buff, 1));
+    SendCommand(new Command(TYPE_SET_CURSOR_STYLE, buff, 1));
 }
 
+//13 Set LCD Contrast
 void Protocol3::SetLCDContrast(int level) {
-    return;
     if( level < 0 )
         level = 0;
     if( level > 50 )
         level = 50;
     unsigned char *buff = (unsigned char *)malloc(1);
     buff[0] = level;
-    SendCommand(new Command(13, buff, 1));
+    SendCommand(new Command(TYPE_SET_LCD_CONTRAST, buff, 1));
 }
 
+//14 Set LCD & Keypad backlight
 void Protocol3::SetLCDBacklight(int level) {
-    return;
     if( level < 0 )
         level = 0;
     if( level > 100 )
         level = 100;
     unsigned char *buff = (unsigned char *)malloc(1);
     buff[0] = level;
-    SendCommand(new Command(14, buff, 1));
+    SendCommand(new Command(TYPE_SET_BACKLIGHT, buff, 1));
 }
 
+// 15 deprecated
+
+//16
+void Protocol3::SetFanReporting(int fan1, int val) {
+// TYPE_SET_FAN_REPORTING
+}
+
+//17
 void Protocol3::SetFanPower(int num, int val) {
     if( val < 0 )
         val = 0;
@@ -1199,9 +1384,95 @@ void Protocol3::SetFanPower(int num, int val) {
     unsigned char *buff = (unsigned char *)malloc(4);
     for(int i = 0; i < 4; i++ )
         buff[i] = fans_[i];
-    SendCommand(new Command(17, buff, 4));
+    SendCommand(new Command(TYPE_SET_FAN_POWER, buff, 4));
 }
 
+// 18
+void Protocol3::ReadDOWInformation(int index, CFCallback *cb) { 
+
+// TYPE_READ_DOW_DEVICE
+}
+
+// 19
+void Protocol3::SetTempReporting(int fan, int on) { 
+// TYPE_SET_TEMP_REPORTING
+}
+
+// 20
+void Protocol3::DOWTransaction() { 
+//TYPE_DOW_TRANSACTION
+}
+
+// 21 deprecated SetLiveDisplay()
+
+//22
+void Protocol3::DirectLCDCommand() {
+//TYPE_DIRECT_LCD_CMD
+}
+
+
+//23
+void Protocol3::SetKeyReporting() {
+//TYPE_SET_KEY_REPORTING
+}
+
+//24
+void Protocol3::ReadKeypadPolledMode() {
+// TYPE_READ_KEY_STATE
+}
+
+//25
+void Protocol3::SetFanPwrFailSafe(int fan, int timeout) {
+//TYPE_SET_FAN_FAILSAFE:
+}
+
+//26
+void Protocol3::SetFanTachGlitchFilter(int fan1, int fan2, int fan3, int fan4) {
+//TYPE_SET_FAN_TACH_GLITCH
+}
+
+//27
+void Protocol3::ReadFanPwrFailSafe(CFCallback *cb) {
+//TYPE_GET_FAN_FAILSAFE
+}
+
+//28
+void Protocol3::SetATXSwitch() {
+//TYPE_SET_ATX_POWER_SW
+}
+
+//29
+void Protocol3::WatchdogHostReset() {
+//TYPE_MANAGE_WATCHDOG
+}
+
+//30
+void Protocol3::ReadReport() {
+//type_reporting_status
+//TYPE_REPORTING_STATUS
+}
+
+//31
+void Protocol3::SendData(int row, int col, unsigned char *data, int len, bool send_now) {
+    unsigned char *buff = (unsigned char *)malloc(len + 2);
+    buff[0] = (char)col;
+    buff[1] = (char)row;
+    for(int i = 0; i < len; i++ )
+        buff[i+2] = data[i];
+    SendCommand(new Command(31, buff, len+2));
+}
+
+//32 Reserved for CFA631 Key Legends
+void Protocol3::KeyLegends() {
+}
+
+
+//33
+void Protocol3::SetBaudRate(int baud_rate) {
+//TYPE_SET_BAUD_RATE
+}
+
+//34
 void Protocol3::SetGPIO(int num, int val) {
     if( val < 0 )
         val = 0;
@@ -1210,6 +1481,11 @@ void Protocol3::SetGPIO(int num, int val) {
     unsigned char *buff = (unsigned char *)malloc(2);
     buff[0] = num;
     buff[1] = val;
-    SendCommand(new Command(34, buff, 2));
+    SendCommand(new Command(TYPE_SET_GPIO, buff, 2));
+}
+
+//35
+void Protocol3::ReadGPIO(CFCallback *cb) {
+//TYPE_GET_GPI0
 }
 

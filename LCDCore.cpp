@@ -380,6 +380,7 @@ void LCDCore::StartLayout(std::string key) {
 
     clear_on_layout_change_ = val->asBool();
 
+    LCDError("StartLayout end: %s", current_layout_.c_str());
     delete val;
 }
 

@@ -318,41 +318,43 @@ class CFPacketVersion: public virtual LCDCore, public GenericSerial,
     void SetFirmwareVersion(std::string version) {firmware_version_ = version;}
     virtual void Ping(std::string msg, CFCallback *cb) = 0; // 0
     virtual void GetVersion(CFCallback *cb) = 0; // 1
-    //virtual void WriteUserFlash() = 0; // 2
-    //virtual void ReadUserFlash(CFCallback *cb) = 0; // 3
-    //virtual void SaveAsBootState() = 0; // 4
-    virtual void Reboot(CFCallback *cb=NULL, bool send_now=false) = 0; // 5
-    //virtual void ResetHost() = 0; // 5
-    //virtual void TurnOffHost() = 0; // 5
+    virtual void WriteUserFlash(unsigned char bytes[16]) = 0; // 2
+    virtual void ReadUserFlash(CFCallback *cb) = 0; // 3
+    virtual void SaveAsBootState() = 0; // 4
+    virtual void Reboot(bool send_now=false, CFCallback *cb = NULL) = 0; // 5
+    virtual void Reset(bool send_now=false, CFCallback *cb = NULL) = 0; // 5
+    virtual void PowerOff(bool send_now=false, CFCallback *cb = NULL) = 0; // 5
     virtual void ClearLCD() = 0; // 6
-    //virtual void Line1() = 0; // 7
-    //virtual void Line2() = 0; // 8
+    virtual void SetLine1(unsigned char *) = 0; // 7 deprecated
+    virtual void SetLine2(unsigned char *) = 0; // 8 deprecated
     virtual void SetSpecialChar(int num, SpecialChar ch) = 0; //  9
-    virtual void SetLCDCursorStyle(int style=0, CFCallback *cb=NULL) = 0; // 12
+    virtual void ReadLCDMemory(CFCallback *cb) = 0; // 10
+    virtual void SetLCDCursorPos(int col, int row) = 0; // 11
+    virtual void SetLCDCursorStyle(int style = 0) = 0; // 12
     virtual void SetLCDContrast(int level) = 0; // 13
     virtual void SetLCDBacklight(int level) = 0; // 14
-    //virtual void ReadFans(CFCallback *cb) = 0; // 15
-    //virtual void SetFanReporting() = 0; // 16
+    virtual void ReadFans(CFCallback *cb) = 0; // 15
+    virtual void SetFanReporting(int fan, int val) = 0; // 16
     virtual void SetFanPower(int num, int val) = 0; // 17
-    //virtual void ReadDOWInformation(int index, CFCallback *cb) = 0; // 18
-    //virtual void SetTempReporting(int index) = 0; // 19
-    //virtual void DOWTransaction() = 0; // 20
-    //virtual void SetLiveDisplay() = 0; // 21
-    //virtual void DirectLCDCommand() = 0; // 22
-    //virtual void SetKeyEventReporting() = 0; // 23
-    //virtual void ReadKeypadPolledMode() = 0; // 24
-    //virtual void SetFanFailSafe(int fan, int timeout) = 0; // 25
-    //virtual void SetFanRPMGlitchFilter(int, int, int, int) = 0; // 26
-    //virtual void ReadFanPwrFailSafe(CFCallback *cb) = 0; // 27
-    //virtual void SetATXSwitch() = 0; // 28
-    //virtual void WatchdogHostReset() = 0; // 29
-    //virtual void ReadReport() = 0; // 30
+    virtual void ReadDOWInformation(int index, CFCallback *cb) = 0; // 18
+    virtual void SetTempReporting(int index, int val) = 0; // 19
+    virtual void DOWTransaction() = 0; // 20
+    virtual void SetLiveDisplay() = 0; // 21
+    virtual void DirectLCDCommand() = 0; // 22
+    virtual void SetKeyReporting() = 0; // 23
+    virtual void ReadKeypadPolledMode() = 0; // 24
+    virtual void SetFanPwrFailSafe(int fan, int timeout) = 0; // 25
+    virtual void SetFanTachGlitchFilter(int, int, int, int) = 0; // 26
+    virtual void ReadFanPwrFailSafe(CFCallback *cb) = 0; // 27
+    virtual void SetATXSwitch() = 0; // 28
+    virtual void WatchdogHostReset() = 0; // 29
+    virtual void ReadReport() = 0; // 30
     virtual void SendData(int row, int col, unsigned char *buf, int len, 
         bool send_now = false) = 0; // 31
-    //virtual void KeyLegends() = 0; // 32
-    //virtual void SetBaudRate() = 0; // 33
+    virtual void KeyLegends() = 0; // 32
+    virtual void SetBaudRate(int baud_rate) = 0; // 33
     virtual void SetGPIO(int num, int val) = 0; // 34
-    //virtual void ReadGPIO() = 0; // 35
+    virtual void ReadGPIO(CFCallback *cb) = 0;
 
 };
 
@@ -414,6 +416,7 @@ class Protocol2 : public CFPacketVersion, public virtual LCDCore {
     Protocol2(std::string name, Model *model, LCDControl *v, 
         Json::Value *config, int layers);
     ~Protocol2();
+/*
     void Ping(std::string msg, CFCallback *cb);
     void GetVersion(CFCallback *cb);
     void Reboot(CFCallback *cb = NULL, bool send_now = false);
@@ -421,11 +424,53 @@ class Protocol2 : public CFPacketVersion, public virtual LCDCore {
     void SendData(int row, int col, unsigned char *data, 
         int len, bool send_now=false);
     void SetSpecialChar(int num, SpecialChar ch);
-    void SetLCDCursorStyle(int style=0, CFCallback *cb=NULL);
+    void SetLCDCursorStyle(int style=0);
     void SetLCDContrast(int level);
     void SetLCDBacklight(int level);
     void SetFanPower(int num, int val);
     void SetGPIO(int num, int val);
+*/
+
+    void Ping(std::string msg, CFCallback *cb); // 0
+    void GetVersion(CFCallback *cb); // 1
+    void WriteUserFlash(unsigned char bytes[16]); // 2
+    void ReadUserFlash(CFCallback *cb); // 3
+    void SaveAsBootState(); // 4
+    void Reboot(bool send_now=false, CFCallback *cb = NULL); // 5
+    void Reset(bool send_now=false, CFCallback *cb = NULL); // 5
+    void PowerOff(bool send_now=false, CFCallback *cb = NULL); // 5
+    void ClearLCD(); // 6
+    void SetLine1(unsigned char *buff); // 7 deprecated
+    void SetLine2(unsigned char *buff); // 8 deprecated
+    void SetSpecialChar(int num, SpecialChar ch); //  9
+    void ReadLCDMemory(CFCallback *cb); // 10
+    void SetLCDCursorPos(int col, int row); // 11
+    void SetLCDCursorStyle(int style); // 12
+    void SetLCDContrast(int level); // 13
+    void SetLCDBacklight(int level); // 14
+    void ReadFans(CFCallback *cb); // 15
+    void SetFanReporting(int fan, int val); // 16
+    void SetFanPower(int num, int val); // 17
+    void ReadDOWInformation(int index, CFCallback *cb); // 18
+    void SetTempReporting(int index, int val); // 19
+    void DOWTransaction(); // 20
+    void SetLiveDisplay(); // 21
+    void DirectLCDCommand(); // 22
+    void SetKeyReporting(); // 23
+    void ReadKeypadPolledMode(); // 24
+    void SetFanPwrFailSafe(int fan, int timeout); // 25
+    void SetFanTachGlitchFilter(int, int, int, int); // 26
+    void ReadFanPwrFailSafe(CFCallback *cb); // 27
+    void SetATXSwitch(); // 28
+    void WatchdogHostReset(); // 29
+    void ReadReport(); // 30
+    void SendData(int row, int col, unsigned char *buf, int len, 
+        bool send_now = false); // 31
+    void KeyLegends(); // 32
+    void SetBaudRate(int baud_rate); // 33
+    void SetGPIO(int num, int val); // 34
+    void ReadGPIO(CFCallback *cb); // 35
+
 };
 
 class Protocol3: public CFPacketVersion, public virtual LCDCore {
@@ -434,18 +479,46 @@ class Protocol3: public CFPacketVersion, public virtual LCDCore {
     Protocol3(std::string name, Model *model, LCDControl *v, 
         Json::Value *config, bool scab, int layers);
     ~Protocol3();
-    void Ping(std::string msg, CFCallback *cb);
-    void GetVersion(CFCallback *cb);
-    void Reboot(CFCallback *cb = NULL, bool send_now = false);
-    void ClearLCD();
-    void SendData(int row, int col, unsigned char *data, 
-        int len, bool send_now=false);
-    void SetSpecialChar(int num, SpecialChar ch);
-    void SetLCDCursorStyle(int style=0, CFCallback *cb=NULL);
-    void SetLCDContrast(int level);
-    void SetLCDBacklight(int level);
-    void SetFanPower(int num, int val);
-    void SetGPIO(int num, int val);
+    void Ping(std::string msg, CFCallback *cb); // 0
+    void GetVersion(CFCallback *cb); // 1
+    void WriteUserFlash(unsigned char bytes[16]); // 2
+    void ReadUserFlash(CFCallback *cb); // 3
+    void SaveAsBootState(); // 4
+    void Reboot(bool send_now=false, CFCallback *cb = NULL); // 5
+    void Reset(bool send_now=false, CFCallback *cb = NULL); // 5
+    void PowerOff(bool send_now=false, CFCallback *cb = NULL); // 5
+    void ClearLCD(); // 6
+    void SetLine1(unsigned char *buff) {}; // 7 deprecated
+    void SetLine2(unsigned char *buff) {}; // 8 deprecated
+    void SetSpecialChar(int num, SpecialChar ch); //  9
+    void ReadLCDMemory(CFCallback *cb); // 10
+    void SetLCDCursorPos(int col, int row); // 11
+    void SetLCDCursorStyle(int style); // 12
+    void SetLCDContrast(int level); // 13
+    void SetLCDBacklight(int level); // 14
+    void ReadFans(CFCallback *cb) {}; // 15
+    void SetFanReporting(int fan, int val); // 16
+    void SetFanPower(int num, int val); // 17
+    void ReadDOWInformation(int index, CFCallback *cb); // 18
+    void SetTempReporting(int index, int val); // 19
+    void DOWTransaction(); // 20
+    void SetLiveDisplay() {}; // 21
+    void DirectLCDCommand(); // 22
+    void SetKeyReporting(); // 23
+    void ReadKeypadPolledMode(); // 24
+    void SetFanPwrFailSafe(int fan, int timeout); // 25
+    void SetFanTachGlitchFilter(int, int, int, int); // 26
+    void ReadFanPwrFailSafe(CFCallback *cb); // 27
+    void SetATXSwitch(); // 28
+    void WatchdogHostReset(); // 29
+    void ReadReport(); // 30
+    void SendData(int row, int col, unsigned char *buf, int len, 
+        bool send_now = false); // 31
+    void KeyLegends(); // 32
+    void SetBaudRate(int baud_rate); // 33
+    void SetGPIO(int num, int val); // 34
+    void ReadGPIO(CFCallback *cb); // 35
+
 };
 
 void CrystalfontzBlit(LCDText *obj, int row, int col,
