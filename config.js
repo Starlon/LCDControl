@@ -4,8 +4,8 @@
     },
     "display_cfa635": {
         "driver": "crystalfontz",
-        "backlight": 100,
-        "contrast": 60,
+        "backlight": 80,
+        "contrast": 95, //0-254
         "layout-timeout": 0,
 	"transition-speed": 500,
         "layout0": "layout_1",
@@ -27,17 +27,17 @@
     "display_cfa635_2": {
         //"driver": "crystalfontz",
         "backlight": 100,
-        "contrast": 60,
+        "contrast": 95, // 0 - 254
         "layout-timeout": 6000,
 	"transition-speed": 100,
-        "layout0": "layout_icons",
-	"layout1": "layout_1",
+        "layout0": "layout_1",
+	/*"layout1": "layout_bar",
         "layout2": "layout_american_flag",
         "layout3": "layout_bar",
         "layout4": "layout_marquee1",
-        "layout5": "layout_bignums",
+        "layout5": "layout_bignums",*/
         "model": "635",
-        "port": "/dev/ttyUSB3",
+        "port": "/dev/ttyUSB1",
         "transitions_off": false,
         "clear_on_layout_change": false,
         "speed": 115200,
@@ -48,10 +48,10 @@
     "display_cfa533": {
         //"driver": "crystalfontz",
         "backlight": 100, 
-        "contrast": 15, 
+        "contrast": 15, // 0 - 50 
         "layout0": "layout_2x16", 
         "model": "533", 
-        "port": "/dev/ttyUSB1", 
+        "port": "/dev/ttyUSB2", 
         "baud": 19200, 
         "widget0": "widget_key_up", 
         "widget1": "widget_key_down"
@@ -294,21 +294,21 @@
     "layout_1": {
         "row1": {
             "col1": "widget_cpu_label",
-            "col11": "widget_cpu_histogram",
+            //"col11": "widget_cpu_histogram",
             "col6": "widget_cpu"
         }, 
         "row2": {
-            "col1": "widget_wlan0_label", 
-            "col11": "widget_wlan0_histogram",
-            "col7": "widget_wlan0"
+            //"col1": "widget_wlan0_label", 
+            //"col11": "widget_wlan0_histogram",
+            //"col7": "widget_wlan0"
         }, 
         "row3": {
-           "col1": "widget_ram_label",
-           "col5": "widget_ram_active",
-           "col11": "widget_ram_total"
+           //"col1": "widget_ram_label",
+           //"col5": "widget_ram_active",
+           //"col11": "widget_ram_total"
         }, 
         "row4": {
-            "col1": "widget_bottom_ticker"
+            //"col1": "widget_bottom_ticker"
         }, 
         "transition": "B"
     }, 

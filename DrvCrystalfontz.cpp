@@ -187,6 +187,12 @@ void CrystalfontzBlit2(LCDText *obj, int row, int col,
         len = len - ((col + len) - self->LCOLS);
     }
 
+    unsigned char *buf = (unsigned char *)malloc(len + 1);
+    buf[len] = 0x00;
+    memcpy(buf, data, len);
+
+    LCDInfo("New Text %s", buf);
+
     self->SendData(row, col, data, len);
 }
 
@@ -277,20 +283,20 @@ CFPacketVersion::~CFPacketVersion() {
     }
     while(command_queue1_.size() > 0) {
         CFCallback *callback = command_queue1_.front();
-        delete callback;
         command_queue1_.pop_front();
+        delete callback;
     }
     while(command_queue2_.size() > 0) {
         CFCallback *callback = command_queue1_.front();
-        delete callback;
         command_queue2_.pop_front();
+        delete callback;
     }
 }
 
 void CFPacketVersion::Update() {
+    CommandWorker();
     FillBuffer();
     CheckPacket();
-    CommandWorker();
 }
 
 void CFPacketVersion::CommandWorker() {
@@ -312,10 +318,10 @@ void CFPacketVersion::CFGSetup() {
     val = CFG_Fetch(CFG_Get_Root(), name_ + ".baud", new Json::Value(115200));
     speed_ = val->asInt();
     delete val;
-    val = CFG_Fetch(CFG_Get_Root(), name_ +  ".contrast", new Json::Value(120));
+    val = CFG_Fetch(CFG_Get_Root(), name_ +  ".contrast", new Json::Value(95));
     contrast_ = val->asInt();
     delete val;
-    val = CFG_Fetch(CFG_Get_Root(), name_ + ".backlight", new Json::Value(100));
+    val = CFG_Fetch(CFG_Get_Root(), name_ + ".backlight", new Json::Value(90));
     backlight_ = val->asInt();
     delete val;
     LCDCore::CFGSetup();
@@ -419,17 +425,20 @@ void CFPacketVersion::SendCommand( Command *cmd, CFCallback *cb,
         void operator()(void *data) {
             int i;
             int crc_value = visitor_->GetCrc(cmd_);
-            unsigned char buf[cmd_->GetDataLength() + 4 + 1];
+            unsigned char txt[cmd_->GetDataLength() + 1];
+            unsigned char buf[cmd_->GetDataLength() + 4];
             buf[0] = (char)cmd_->GetCommand();
             buf[1] = (char)cmd_->GetDataLength();
-            for(i = 0; i < cmd_->GetDataLength(); i++)
+            for(i = 0; i < cmd_->GetDataLength(); i++) {
                 buf[i+2] = cmd_->GetData()[i];
+                txt[i] = buf[i+2];
+            }
             buf[i+2] = (char)(crc_value & 0xFF);
             buf[i+3] = (char)((crc_value>>8)&0xFF);
-            buf[i+4] = 0x00;
+            txt[i] = 0x00;
+            LCDError("SerialWrite %s\n", txt);
             visitor_->SerialWrite(buf, cmd_->GetDataLength() + 4);
             visitor_->BinAdd(cmd_, cb_, priority_, send_now_);
-            LCDError("SerialWrite %s\n", command_names[buf[0]]);
         }
     };
     SendCommandCB *callback = new SendCommandCB(this, cmd, cb, 
@@ -457,23 +466,22 @@ void CFPacketVersion::CheckPacket() {
     buffer_.SetCurrent(0);
     read = buffer_.Peek(data);
     if( read == 0 ) {
-        LCDError("2)");
+        LCDError("2) No data.");
         buffer_.SetLocked(false);
         return;
     }
     if( MAX_COMMAND < (0X3F & data[0])) {
-        LCDError("3)");
+        LCDError("3) Bad packet command received.");
         buffer_.Read(data);
         tossed_++;
         buffer_.SetLocked(false);
         return;
     }
     if((data[0] & 0xC0) == 0xC0) {
-        LCDError("4)");
         buffer_.Read(data);
         errors_^=data[0];
         buffer_.SetLocked(false);
-        LCDError("Report from display: %d: %s", 
+        LCDError("4) Report from display: %d: %s", 
             data[0], command_names[data[0] & 0x3F]);
         return;
     }
@@ -497,7 +505,7 @@ void CFPacketVersion::CheckPacket() {
     unsigned char length = data[0];
     read = buffer_.Peek(data, length + 2);
     if(read < length + 2 ) {
-        LCDError("7)");
+        LCDError("7) Packet not ready.");
         buffer_.SetLocked(false);
         return;
     }
@@ -513,7 +521,7 @@ void CFPacketVersion::CheckPacket() {
     packet_.GetCrc()[1] = data[0];
 
     if(packet_.GetCrc().AsWord() != GetCrc(packet_)) {
-        LCDError("8)");
+        LCDError("8) Tossing packet.");
         buffer_.Read(data);
         tossed_++;
         buffer_.SetLocked(false);
@@ -781,7 +789,7 @@ void Protocol1::CFGSetup() {
     val = CFG_Fetch(CFG_Get_Root(), name_ + ".baud", new Json::Value(19200));
     speed_ = val->asInt();
     delete val;
-    val = CFG_Fetch(CFG_Get_Root(), name_ + ".contrast", new Json::Value(100));
+    val = CFG_Fetch(CFG_Get_Root(), name_ + ".contrast", new Json::Value(16));
     contrast_ = val->asInt();
     delete val;
     val = CFG_Fetch(CFG_Get_Root(), name_ + ".backlight", new Json::Value(100));
@@ -1349,8 +1357,8 @@ void Protocol3::SetLCDCursorStyle(int style) {
 void Protocol3::SetLCDContrast(int level) {
     if( level < 0 )
         level = 0;
-    if( level > 50 )
-        level = 50;
+    if( level > 254 )
+        level = 254;
     unsigned char *buff = (unsigned char *)malloc(1);
     buff[0] = level;
     SendCommand(new Command(TYPE_SET_LCD_CONTRAST, buff, 1));
@@ -1457,8 +1465,10 @@ void Protocol3::SendData(int row, int col, unsigned char *data, int len, bool se
     unsigned char *buff = (unsigned char *)malloc(len + 2);
     buff[0] = (char)col;
     buff[1] = (char)row;
-    for(int i = 0; i < len; i++ )
+    int i;
+    for(i = 0; i < len; i++ )
         buff[i+2] = data[i];
+
     SendCommand(new Command(31, buff, len+2));
 }
 
