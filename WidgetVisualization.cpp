@@ -168,7 +168,7 @@ WidgetVisualization::WidgetVisualization(LCDCore *v, std::string n, Json::Value 
 
     if(!visual_is_initialized()) {
         visual_init(0, 0);
-        visual_log_set_verboseness(VISUAL_LOG_VERBOSENESS_LOW);
+        visual_log_set_verboseness(VISUAL_LOG_DEBUG);
     }
     
     proxy_.plugin = actor.c_str();

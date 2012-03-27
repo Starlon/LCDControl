@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     signal(SIGQUIT, handler);
     signal(SIGTERM, handler);
     visual_init(&argc, &argv);
-    visual_log_set_verboseness(VISUAL_LOG_VERBOSENESS_HIGH);
+    visual_log_set_verboseness(VISUAL_LOG_DEBUG);
     QApplication *app = new QApplication(argc, argv);
     lcdControl = new LCD::LCDControl(app);
     int ret = lcdControl->Start();
