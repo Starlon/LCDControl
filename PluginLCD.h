@@ -24,9 +24,6 @@
 
 #include <string>
 #include <vector>
-#include <QObject>
-#include <QTimer>
-#include <QtScript>
 
 #include "SpecialChar.h"
 
@@ -34,12 +31,10 @@ namespace LCD {
 
 class LCDCore;
 
-class PluginLCD : public QObject {
-    Q_OBJECT
+class PluginLCD {
 
     LCDCore *visitor_;
     int type_;
-    QTimer *tick_timer_;
 
     void Setup();
 
@@ -49,24 +44,24 @@ class PluginLCD : public QObject {
 
     public slots:
     void Transition(int i);
-    void SelectLayout(QString layout);
-    int RemoveWidget(QString widget);
-    QString AddWidget(QString layout, int row, int col, 
-        int layer, QString object);
-    int MoveWidget(QString widget, int rows, int cols);
+    void SelectLayout(string layout);
+    int RemoveWidget(string widget);
+    string AddWidget(string layout, int row, int col, 
+        int layer, string object);
+    int MoveWidget(string widget, int rows, int cols);
     int ResizeLCD(int rows, int cols);
     void SendData(int row, int col, int layer, 
-        QString data);
+        string data);
     void SetSpecialChar(int ch, SpecialChar matrix);
     void AddSpecialChar(SpecialChar matrix);
     void Clear();
     void ClearChars();
-    QString GetCurrentLayout();
+    string GetCurrentLayout();
     int GetRows();
     int GetCols();
     int GetXres();
     int GetYres();
-    QString GetType();
+    string GetType();
 
     void TickUpdate();
     void SetTimeout(int val);

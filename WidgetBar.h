@@ -27,7 +27,7 @@
 #include <json/json.h>
 #include <string>
 #include <map>
-#include <QTimer>
+#include <libvisual/libvisual.h>
 
 #include "Property.h"
 #include "Widget.h"
@@ -44,7 +44,6 @@ class LCDGraphic;
 typedef enum { STYLE_HOLLOW = 1, STYLE_NORMAL = 2 } STYLE;
 
 class WidgetBar : public Widget {
-    Q_OBJECT
     Property *expression_;
     Property *expression2_;
     Property *expr_min_;
@@ -64,7 +63,8 @@ class WidgetBar : public Widget {
 
     std::map<int, char> ch_;
 
-    QTimer *timer_;
+    VisTimer timer;
+    //QTimer *timer_;
 
     void (*Draw)(WidgetBar *);
 

@@ -24,7 +24,6 @@
 #ifndef __PROPERTY__
 #define __PROPERTY__
 
-#include <QtScript>
 #include <json/json.h>
 #include <string>
 
@@ -40,7 +39,7 @@ class LCDGraphic;
 class Property {
     bool is_valid;
     LCDCore *visitor_;
-    QScriptValue result_;
+    //QScriptValue result_;
     Json::Value *expression_;
     std::string name_;
 

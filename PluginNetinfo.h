@@ -24,16 +24,13 @@
 #ifndef __PLUGIN_NETINFO_H__
 #define __PLUGIN_NETINFO_H__
 
-#include <QObject>
 #include "PluginInterface.h"
 
 namespace LCD {
 
 class Evaluator;
 
-class PluginNetinfo : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
+class PluginNetinfo {
 
     int socknr;
     int OpenNet();
@@ -45,11 +42,11 @@ class PluginNetinfo : public QObject, PluginInterface {
     void Disconnect() {}
 
     public slots:
-    double Exists(QString arg1);
-    QString Hwaddr(QString arg1);
-    QString Ipaddr(QString arg1);
-    QString Netmask(QString arg1);
-    QString Bcaddr(QString arg1);
+    double Exists(char *arg1);
+    char *Hwaddr(char *arg1);
+    char *Ipaddr(char *arg1);
+    char *Netmask(char *arg1);
+    char *Bcaddr(char * arg1);
 };
 
 }; // End namespace

@@ -24,8 +24,6 @@
 #ifndef __PLUGIN_MEMINFO_H__
 #define __PLUGIN_MEMINFO_H__
 
-#include <QObject>
-
 #include "Hash.h"
 #include "PluginInterface.h"
 
@@ -33,9 +31,9 @@ namespace LCD {
 
 class Evaluator;
 
-class PluginMeminfo : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
+class PluginMeminfo {
+    
+    (LCD::PluginInterface)
 
     HASH MemInfo;
     FILE *stream;
@@ -48,7 +46,7 @@ class PluginMeminfo : public QObject, PluginInterface {
     void Disconnect() {}
 
     public slots:
-    QString Meminfo(QString arg1);
+    string Meminfo(string arg1);
         
 };
 

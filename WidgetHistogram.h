@@ -26,8 +26,8 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <QTimer>
 #include <math.h>
+#include <libvisual/libvisual.h>
 
 #include "Property.h"
 #include "Widget.h"
@@ -42,7 +42,6 @@ class LCDGraphic;
 class LCDCore;
 
 class WidgetHistogram : public Widget {
-    Q_OBJECT
     int min_;
     int max_;
     std::string string_;
@@ -56,7 +55,7 @@ class WidgetHistogram : public Widget {
     std::vector<double> history_;
     std::map<char, char> ch_;
 
-    QTimer *timer_;
+    VisTimer timer;
 
     void (*Draw)(WidgetHistogram *);
 

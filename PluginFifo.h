@@ -26,7 +26,6 @@
 
 #define FIFO_BUFFER_SIZE 80
 
-#include <QObject>
 #include <json/json.h>
 
 #include "PluginInterface.h"
@@ -36,9 +35,7 @@ namespace LCD {
 
 class Evaluator;
 
-class PluginFifo: public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
+class PluginFifo{
 
     typedef struct _FifoData {
         char *path;
@@ -67,7 +64,7 @@ class PluginFifo: public QObject, PluginInterface {
     void Disconnect() {}
 
     public slots:
-    QString Fiforead();
+    string Fiforead();
     int Test(char *foo);
 
 };

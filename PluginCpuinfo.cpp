@@ -82,7 +82,7 @@ int PluginCpuinfo::ParseCpuinfo(void)
 }
 
 
-QString PluginCpuinfo::Cpuinfo(QString key) //RESULT * result, RESULT * arg1)
+char * PluginCpuinfo::Cpuinfo(char * key)
 {
     const char *val;
 
@@ -93,7 +93,7 @@ QString PluginCpuinfo::Cpuinfo(QString key) //RESULT * result, RESULT * arg1)
     val = hash_get(&CPUinfo, key.toStdString().c_str(), NULL);
     if (val == NULL)
         val = "";
-    return QString(val);
+    return val;
 }
 
 
@@ -101,7 +101,7 @@ PluginCpuinfo::PluginCpuinfo()
 {
     stream = NULL;
     hash_create(&CPUinfo);
-    //AddFunction("cpuinfo", 1, my_cpuinfo);
+    AddFunction("cpuinfo", 1, my_cpuinfo);
 }
 
 PluginCpuinfo::~PluginCpuinfo()
@@ -114,10 +114,12 @@ PluginCpuinfo::~PluginCpuinfo()
 }
 
 void PluginCpuinfo::Connect(Evaluator *visitor) {
+/*
     QScriptEngine *engine = visitor->GetEngine();
     QScriptValue val = engine->newObject();
     QScriptValue objVal = engine->newQObject(val, this);
     engine->globalObject().setProperty("cpuinfo", objVal);
+*/
 }
 
-Q_EXPORT_PLUGIN2(_PluginCpuinfo, PluginCpuinfo);
+//Q_EXPORT_PLUGIN2(_PluginCpuinfo, PluginCpuinfo);

@@ -21,7 +21,6 @@
  * along with LCDControl.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QObject>
 #include <stdlib.h>
 #include <cstring>
 #include <errno.h>
@@ -70,10 +69,12 @@ QString PluginUname::Uname(QString arg1)
 }
 
 void PluginUname::Connect(Evaluator *visitor) {
+/*
     QScriptEngine *engine = visitor->GetEngine();
     QScriptValue val = engine->newObject();
     QScriptValue objVal = engine->newQObject(val, this);
     engine->globalObject().setProperty("uname", objVal);
+*/
 }
 
 Q_EXPORT_PLUGIN2(_PluginUname, PluginUname)

@@ -27,7 +27,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <QTimer>
 #include <math.h>
 
 #include "Property.h"
@@ -66,9 +65,10 @@ class WidgetVisualization : public Widget {
     bool has_chars_;
     char *peak_buffer_;
 
+/*
     QTimer *timer_;
     QTimer *morph_timer_;
-
+*/
     // libvisual stuff
     VisSongInfo current_songinfo_;
     VisSongInfo final_songinfo_;

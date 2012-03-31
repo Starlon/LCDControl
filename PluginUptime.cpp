@@ -30,8 +30,6 @@
 #include <sys/time.h>
 #include <fcntl.h>
 #include <iostream>
-#include <QtScript>
-#include <QScriptEngine>
 
 #include "debug.h"
 #include "PluginUptime.h"
@@ -176,7 +174,7 @@ double PluginUptime::GetUptime()
 }
 
 
-QString PluginUptime::Uptime(QString fmt) {
+string PluginUptime::Uptime(string fmt) {
     int age;
     struct timeval now;
 
@@ -195,7 +193,7 @@ QString PluginUptime::Uptime(QString fmt) {
     }
 
     char *buffer = struptime(uptime, fmt.toStdString().c_str());
-    QString str = buffer;
+    string str = buffer;
     return str;
 }
 
@@ -235,10 +233,12 @@ PluginUptime::~PluginUptime() {
 }
 
 void PluginUptime::Connect(Evaluator *visitor) {
+/*
     QScriptEngine *engine = visitor->GetEngine();
     QScriptValue val = engine->newObject();
     QScriptValue objVal = engine->newQObject(val, this);
     engine->globalObject().setProperty("uptime", objVal);
+*/
 }
 
 Q_EXPORT_PLUGIN2(_PluginUptime, PluginUptime);

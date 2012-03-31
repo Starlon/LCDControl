@@ -145,11 +145,12 @@ WidgetVisualization::WidgetVisualization(LCDCore *v, std::string n, Json::Value 
    
     history_.resize(rows_);
 
+/*
     timer_ = new QTimer();
     timer_->setSingleShot(false);
     timer_->setInterval(update_);
-    QObject::connect(timer_, SIGNAL(timeout()), this, SLOT(Update()));
-
+    //QObject::connect(timer_, SIGNAL(timeout()), this, SLOT(Update()));
+*/
 
     last_update_.tv_sec = last_update_.tv_usec = 0;
 
@@ -164,7 +165,7 @@ WidgetVisualization::WidgetVisualization(LCDCore *v, std::string n, Json::Value 
     morph_timer_ = new QTimer();
     morph_timer_->setSingleShot(false);
     morph_timer_->setInterval(morph_timeout_);
-    QObject::connect(morph_timer_, SIGNAL(timeout()), this, SLOT(VisualMorph()));
+    //QObject::connect(morph_timer_, SIGNAL(timeout()), this, SLOT(VisualMorph()));
 
     if(!visual_is_initialized()) {
         visual_init(0, 0);
@@ -250,12 +251,14 @@ WidgetVisualization::WidgetVisualization(LCDCore *v, std::string n, Json::Value 
 
     DoParams();
 
+/*
     QObject::connect(visitor_->GetWrapper(), SIGNAL(_ResizeLCD(int, int, int, int)),
         this, SLOT(Resize(int, int, int, int)));
     QObject::connect(visitor_->GetWrapper(), SIGNAL(_ResizeBefore(int, int)),
         this, SLOT(ResizeBefore(int, int)));
     QObject::connect(visitor_->GetWrapper(), SIGNAL(_ResizeAfter()),
         this, SLOT(ResizeAfter()));
+*/
 
     LCDError("WidgetVisualization %s", name_.c_str());
 }

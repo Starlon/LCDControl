@@ -24,23 +24,19 @@
 #ifndef __PLUGIN_FILE_H__
 #define __PLUGIN_FILE_H__
 
-#include <QObject>
-
 #include "PluginInterface.h"
 
 namespace LCD {
 
 class Evaluator;
 
-class PluginFile : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
+class PluginFile {
 
     void Connect(Evaluator *visitor);
     void Disconnect() {}
 
     public slots:
-    QString Readline(QString arg1, int arg2);
+    char *Readline(QString arg1, int arg2);
 };
 
 }; // End namespace

@@ -24,7 +24,6 @@
 #ifndef __PLUGIN_UPTIME__
 #define __PLUGIN_UPTIME__
 
-#include <QObject>
 #include <sys/time.h>
 
 #include "PluginInterface.h"
@@ -33,9 +32,7 @@ namespace LCD {
 
 class Evaluator;
 
-class PluginUptime : public QObject, public PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface);
+class PluginUptime {
 
     LCDCore *visitor_;
     int fd;
@@ -51,7 +48,7 @@ class PluginUptime : public QObject, public PluginInterface {
 
     public slots:
     double Uptime();
-    QString Uptime(QString format);
+    char *Uptime(string format);
 };
 
 }; // End namespace

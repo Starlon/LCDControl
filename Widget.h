@@ -23,7 +23,6 @@
 #define __WIDGET__
 
 #include <iostream>
-#include <QObject>
 #include <json/json.h>
 #include <string>
 
@@ -38,8 +37,8 @@ class LCDGraphic;
 
 class LCDCore;
 
-class Widget : public QObject {
-    Q_OBJECT
+class Widget {
+    //Q_OBJECT
  
     protected:
     LCDCore *visitor_;

@@ -24,8 +24,6 @@
 #ifndef __PLUGIN_PROC_STAT_H__
 #define __PLUGIN_PROC_STAT_H__
 
-#include <QObject>
-
 #include "Hash.h"
 #include "PluginInterface.h"
 
@@ -33,9 +31,7 @@ namespace LCD {
 
 class Evaluator;
 
-class PluginProcStat : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
+class PluginProcStat {
 
     HASH Stat;
     FILE *stream;
@@ -54,10 +50,10 @@ class PluginProcStat : public QObject, PluginInterface {
         void Disconnect() {}
 
     public slots:
-        QString ProcStat(QString arg1);
-        double ProcStat(QString arg1, double arg2);
-        double Cpu(QString arg1, int arg2);
-        double Disk(QString arg1, QString arg2, double arg3);
+        char *ProcStat(char *arg1);
+        double ProcStat(char *arg1, double arg2);
+        double Cpu(char *arg1, int arg2);
+        double Disk(char *arg1, char *arg2, double arg3);
 };
 
 }; // End namespace

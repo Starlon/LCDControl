@@ -106,13 +106,15 @@ WidgetIcon::WidgetIcon(LCDCore *v, std::string n,
 
     bitmap_ = new SpecialChar(data_[0].Size());
 
+/*
     timer_ = new QTimer();
     timer_->setSingleShot(false);
     timer_->setInterval(update_);
-    QObject::connect(timer_, SIGNAL(timeout()), this, SLOT(Update()));
+*/
+    //QObject::connect(timer_, SIGNAL(timeout()), this, SLOT(Update()));
 
-    QObject::connect(visitor_->GetWrapper(), SIGNAL(_ResizeLCD(int, int, int, int)),
-        this, SLOT(Resize(int, int, int, int)));
+    //QObject::connect(visitor_->GetWrapper(), SIGNAL(_ResizeLCD(int, int, int, int)),
+    //    this, SLOT(Resize(int, int, int, int)));
 
 }
 

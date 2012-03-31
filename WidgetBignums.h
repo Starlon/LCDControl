@@ -26,7 +26,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include <QTimer>
+#include <libvisual/libvisual.h>
 
 #include "Widget.h"
 #include "Font_8x16.h"
@@ -42,7 +42,6 @@ class LCDGraphic;
 class LCDCore;
 
 class WidgetBignums : public Widget {
-    Q_OBJECT
     std::vector<char> FB_;
     std::vector<char> ch_;
     int min_;
@@ -52,7 +51,7 @@ class WidgetBignums : public Widget {
     Property *expr_min_;
     Property *expr_max_;
 
-    QTimer *timer_;
+    VisTimer timer;
 
     void (*Draw)(WidgetBignums *);
     

@@ -22,7 +22,6 @@
  */
 
 #include <string>
-#include <QtScript>
 #include <stdio.h>
 #include <json/json.h>
 
@@ -77,6 +76,7 @@ int Property::Eval() {
 
     int update = 1;
 
+/*
     QScriptValue old(result_);
 
     result_ = visitor_->Eval(expression_->asCString());
@@ -86,6 +86,7 @@ int Property::Eval() {
     } else if (old.toString() == result_.toString()) {
         update = 0;
     }
+*/
     return update;
 }
 

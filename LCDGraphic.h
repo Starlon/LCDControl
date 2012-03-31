@@ -26,10 +26,6 @@
 
 #include <string>
 #include <vector>
-#include <QObject>
-#include <QTimer>
-#include <QThread>
-#include <QMutex>
 #include <sys/time.h>
 
 #include "RGBA.h"
@@ -57,8 +53,7 @@ class LCDGraphicInterface {
     virtual void LayoutChangeAfter() = 0;
 };
 
-class LCDGraphicWrapper : public QObject, public LCDGraphicInterface {
-    Q_OBJECT
+class LCDGraphicWrapper public LCDGraphicInterface {
     LCDGraphicInterface *wrappedObject_;
     public:
     LCDGraphicWrapper(LCDGraphicInterface *visitor) { wrappedObject_ = visitor; }
@@ -124,7 +119,6 @@ class LCDGraphic : public LCDBase, public LCDGraphicInterface {
     RGBA BL_COL;
     RGBA NO_COL;
 
-    QMutex graphic_mutex_;
 
     bool INVERTED;
 
@@ -175,8 +169,7 @@ class LCDGraphic : public LCDBase, public LCDGraphicInterface {
 
 };
 
-class LCDGraphicUpdateThread : public QThread {
-    Q_OBJECT
+class LCDGraphicUpdateThread {
     LCDGraphic *visitor_;
 
     protected:

@@ -24,18 +24,13 @@
 #ifndef __PLUGIN_LOADAVG_H__
 #define __PLUGIN_LOADAVG_H__
 
-#include <QObject>
-
 #include "PluginInterface.h"
 
 namespace LCD {
 
 class Evaluator;
 
-class PluginLoadavg : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
-
+class PluginLoadavg {
     int fd;
     int GetLoadavg(double loadavg[], int nelem);
 

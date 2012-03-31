@@ -1,3 +1,4 @@
+// This file is not used without QT
 /* $Id$
  * $URL$
  *
@@ -21,8 +22,6 @@
 
 #ifndef __WRAPPER_H__
 #define __WRAPPER_H__
-
-#include <QObject>
 
 #include "debug.h"
 
@@ -64,8 +63,7 @@ class LCDEvents {
     virtual void _ResizeAfter() = 0;
 };
 
-class LCDWrapper : public QObject, public LCDInterface, public LCDEvents {
-    Q_OBJECT
+class LCDWrapper : public LCDInterface, public LCDEvents {
     LCDInterface *wrappedObject;
 
     public:

@@ -21,7 +21,6 @@
 
 #include <json/json.h>
 #include <Magick++.h>
-#include <QTimer>
 
 #include "WidgetGif.h"
 #include "LCDText.h"
@@ -174,6 +173,7 @@ WidgetGif::WidgetGif(LCDCore *v, std::string name, Json::Value *config,
     x2_ = col_ + cols_;
     y2_ = row_ + rows_;
 
+/*
     timer_ = new QTimer();
     timer_->setSingleShot(false);
     timer_->setInterval(update_->P2INT());
@@ -181,7 +181,7 @@ WidgetGif::WidgetGif(LCDCore *v, std::string name, Json::Value *config,
 
     QObject::connect(visitor_->GetWrapper(), SIGNAL(_ResizeLCD(int, int, int, int)),
         this, SLOT(Resize(int, int, int, int)));
-
+*/
 }
 
 

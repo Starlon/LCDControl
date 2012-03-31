@@ -22,9 +22,6 @@
 #ifndef __PLUGIN_NETSTAT_H__
 #define __PLUGIN_NETSTAT_H__
 
-#include <QObject>
-#include <QtScript>
-
 #include "Hash.h"
 #include "PluginInterface.h"
 
@@ -32,9 +29,7 @@ namespace LCD {
 
 class Evaluator;
 
-class PluginNetStat : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
+class PluginNetStat {
 
     HASH NetStat;
     FILE *Stream;
@@ -50,7 +45,7 @@ class PluginNetStat : public QObject, PluginInterface {
     void Disconnect() {}
 
     public slots:
-    QString Netstat(QString arg1, QString arg2);
+    char *Netstat(char *arg1, char *arg2);
     int LineCount();
 };
 

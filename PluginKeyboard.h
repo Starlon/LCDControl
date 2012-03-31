@@ -22,8 +22,6 @@
 #ifndef __PLUGIN_KEYBOARD_H__
 #define __PLUGIN_KEYBOARD_H__
 
-#include <QTimer>
-#include <QThread>
 #include <X11/Xlib.h>
 
 namespace LCD {
@@ -35,7 +33,7 @@ class LCDCore;
 
 class PluginKeyboardThread;
 
-class PluginKeyboard : public QObject{
+class PluginKeyboard {
     Q_OBJECT
     LCDCore *visitor_;
     PluginKeyboardThread *poll_thread_;

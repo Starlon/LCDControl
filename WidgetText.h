@@ -25,7 +25,6 @@
 #define _WIDGET_TEXT_H_
 
 #include <string>
-#include <QTimer>
 
 #include "Property.h"
 #include "Widget.h"
@@ -38,7 +37,6 @@ typedef enum { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT, ALIGN_MARQUEE, ALIGN_AUTOM
 typedef enum { SCROLL_RIGHT, SCROLL_LEFT } SCROLL_DIRECTION;
 
 class WidgetText : public Widget {
-    Q_OBJECT
     Property *prefix_;      /* label on the left side */
     Property *postfix_;     /* label on the right side */
     Property *value_;       /* value of text widget */
@@ -55,8 +53,8 @@ class WidgetText : public Widget {
     int delay_;             /* pingpong scrolling, wait before switch direction */
     bool bold_;
 
-    QTimer *timer_;
-    QTimer *scroll_timer;
+    VisTimer timer_;
+    VisTimer scroll_timer_;
 
     public:
     WidgetText(LCDCore *visitor, std::string name, Json::Value *section, 

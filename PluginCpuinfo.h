@@ -24,8 +24,6 @@
 #ifndef __PLUGIN_CPUINFO_H__
 #define __PLUGIN_CPUINFO_H__
 
-#include <QObject>
-
 #include "Hash.h"
 #include "PluginInterface.h"
 
@@ -48,7 +46,7 @@ class PluginCpuinfo :public QObject, public PluginInterface {
     void Disconnect() {}
 
     public slots:
-    QString Cpuinfo(QString key);
+    string Cpuinfo(string key);
 };
 
 }; // End namespace

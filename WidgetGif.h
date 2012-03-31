@@ -25,8 +25,6 @@
 #include <vector>
 #include <json/json.h>
 #include <Magick++.h>
-#include <QObject>
-#include <QTimer>
 
 #include "Widget.h"
 #include "Property.h"
@@ -40,7 +38,6 @@ class LCDGraphic;
 class LCDCore;
 
 class WidgetGif : public Widget {
-    Q_OBJECT
     Property *update_;            /* update interval (msec) */
     Property *visible_;
     Json::Value *file_;
@@ -59,7 +56,6 @@ class WidgetGif : public Widget {
     std::list<Magick::Image>::iterator framePtr_;
     std::list<Magick::Image>::iterator start_;
     std::list<Magick::Image>::iterator end_;
-    QTimer *timer_;
     void (*Draw)(WidgetGif *w);
 
     public:

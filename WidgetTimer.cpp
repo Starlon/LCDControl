@@ -23,7 +23,6 @@
 
 #include <string>
 #include <json/json.h>
-#include <QTimer>
 
 #include "Widget.h"
 #include "WidgetTimer.h"
@@ -44,10 +43,12 @@ WidgetTimer::WidgetTimer(LCDCore *v, std::string n, Json::Value *section) :
     update_ = val->asInt();
     delete val;
 
+/*
     timer_ = new QTimer();
     timer_->setSingleShot(false);
     timer_->setInterval(update_);
-    QObject::connect(timer_, SIGNAL(timeout()), this, SLOT(Update()));
+    //QObject::connect(timer_, SIGNAL(timeout()), this, SLOT(Update()));
+*/
 }
 
 WidgetTimer::~WidgetTimer() {

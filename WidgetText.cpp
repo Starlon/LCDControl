@@ -24,7 +24,6 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
-#include <QTimer>
 
 #include "Property.h"
 #include "Widget.h"
@@ -141,17 +140,19 @@ WidgetText::WidgetText(LCDCore *v, std::string name, Json::Value *config,
     bold_ = val->asInt();
     delete val;
 
+/*
     timer_ = new QTimer();
     timer_->setSingleShot(false);
     timer_->setInterval(update_);
-    QObject::connect(timer_, SIGNAL(timeout()), this, SLOT(Update()));
+    //QObject::connect(timer_, SIGNAL(timeout()), this, SLOT(Update()));
 
     scroll_timer = new QTimer();
     scroll_timer->setInterval(speed_);
-    QObject::connect(scroll_timer, SIGNAL(timeout()), this, SLOT(TextScroll()));
+    //QObject::connect(scroll_timer, SIGNAL(timeout()), this, SLOT(TextScroll()));
 
-    QObject::connect(visitor_->GetWrapper(), SIGNAL(_ResizeLCD(int, int, int, int)),
-        this, SLOT(Resize(int, int, int, int)));
+    //QObject::connect(visitor_->GetWrapper(), SIGNAL(_ResizeLCD(int, int, int, int)),
+    //    this, SLOT(Resize(int, int, int, int)));
+*/
 }
 WidgetText::~WidgetText() {
     Stop();

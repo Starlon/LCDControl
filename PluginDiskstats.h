@@ -24,8 +24,6 @@
 #ifndef __PLUGIN_DISKSTATS_H__
 #define __PLUGIN_DISKSTATS_H__
 
-#include <QObject>
-
 #include "Hash.h"
 #include "PluginInterface.h"
 
@@ -33,9 +31,7 @@ namespace LCD {
 
 class Evaluator;
 
-class PluginDiskstats : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
+class PluginDiskstats {
 
     HASH DISKSTATS;
     FILE *stream;
@@ -48,7 +44,7 @@ class PluginDiskstats : public QObject, PluginInterface {
     void Disconnect() {}
 
     public slots:
-    double Diskstats(QString arg1, QString arg2, int arg3);
+    double Diskstats(string arg1, string arg2, int arg3);
 };
 
 }; // End namespace

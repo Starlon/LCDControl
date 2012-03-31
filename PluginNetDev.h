@@ -24,10 +24,6 @@
 #ifndef __PLUGIN_NETDEV_H__
 #define __PLUGIN_NETDEV_H__
 
-#include <QObject>
-#include <QString>
-#include <QtScript>
-
 #include "Hash.h"
 #include "PluginInterface.h"
 
@@ -35,9 +31,7 @@ namespace LCD {
 
 class Evaluator;
 
-class PluginNetDev : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
+class PluginNetDev {
 
     HASH NetDev;
     FILE *Stream;
@@ -52,8 +46,8 @@ class PluginNetDev : public QObject, PluginInterface {
     void Disconnect() {}
 
     public slots:
-    QScriptValue Regex(QString arg1, QString arg2, int arg3);
-    QScriptValue Fast(QString arg1, QString arg2, int arg3);
+    char *Regex(QString arg1, QString arg2, int arg3);
+    char *Fast(QString arg1, QString arg2, int arg3);
 };
 
 };

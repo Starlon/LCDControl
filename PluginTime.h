@@ -24,17 +24,13 @@
 #ifndef __PLUGIN_TIME_H__
 #define __PLUGIN_TIME_H__
 
-#include <QObject>
-
 #include "PluginInterface.h"
 
 namespace LCD {
 
 class Evaluator;
 
-class PluginTime : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
+class PluginTime {
 
     public:
     void Connect(Evaluator *visitor);
@@ -42,8 +38,8 @@ class PluginTime : public QObject, PluginInterface {
 
     public slots:
     unsigned int Time();
-    QString Strftime(QString arg1, double arg2);
-    QString Strftime_tz(QString arg1, double arg2, QString arg3);
+    char *Strftime(char * arg1, double arg2);
+    char *Strftime_tz(char * arg1, double arg2, char * arg3);
     unsigned long GetTimeOfDay();
 };
 

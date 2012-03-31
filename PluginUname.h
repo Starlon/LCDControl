@@ -24,15 +24,13 @@
 #ifndef __PLUGIN_UNAME_H__
 #define __PLUGIN_UNAME_H__
 
-#include <QObject>
-
 #include "PluginInterface.h"
 
 namespace LCD {
 
 class Evaluator;
 
-class PluginUname : public QObject, PluginInterface {
+class PluginUname {
     Q_OBJECT
     Q_INTERFACES(LCD::PluginInterface)
 
@@ -41,7 +39,7 @@ class PluginUname : public QObject, PluginInterface {
     void Disconnect() {}
 
     public slots:
-    QString Uname(QString arg1);
+    string Uname(string arg1);
 
 };
 

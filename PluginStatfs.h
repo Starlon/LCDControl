@@ -24,17 +24,13 @@
 #ifndef __PLUGIN_STATFS_H__
 #define __PLUGIN_STATFS_H__
 
-#include <QObject>
 #include "PluginInterface.h"
 
 namespace LCD {
 
 class Evaluator;
 
-class PluginStatfs : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
-
+class PluginStatfs {
     public:
     void Connect(Evaluator *visitor);
     void Disconnect() {}

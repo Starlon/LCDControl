@@ -24,9 +24,6 @@
 #ifndef __PLUGIN_EXEC_H__
 #define __PLUGIN_EXEC_H__
 
-#include <QObject>
-#include <QThread>
-#include <QMutex>
 #include <list>
 #include <string>
 
@@ -39,9 +36,7 @@ class Evaluator;
 
 class PluginExecThread;
 
-class PluginExec : public QObject, PluginInterface {
-    Q_OBJECT
-    Q_INTERFACES(LCD::PluginInterface)
+class PluginExec {
     HASH hash_;
     std::list<PluginExecThread *> threads_;
     int DoExec(char *cmd, char *key, int delay);
@@ -53,17 +48,14 @@ class PluginExec : public QObject, PluginInterface {
     void Disconnect();
 
     public slots:
-    QString Exec(QString arg1, int timeout);
+    string Exec(string arg1, int timeout);
 
 };
 
 #define MEM_SIZE 4096
 
-class PluginExecThread : public QThread {
-    Q_OBJECT
+class PluginExecThread {
     bool running_;
-    QMutex mutex_;
-    QThreadStorage<char *> storage_;
     char *cmd_;
     char *ret_;
     char *key_;
@@ -91,7 +83,6 @@ class PluginExecThread : public QThread {
             return NULL; 
         return storage_.localData();
     }
-    QMutex &GetMutex() { return mutex_; }
 };
 
 };

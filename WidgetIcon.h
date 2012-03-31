@@ -29,7 +29,6 @@
 #include <sstream>
 #include <vector>
 #include <map>
-#include <QObject>
 
 #include "Widget.h"
 #include "SpecialChar.h"
@@ -43,7 +42,7 @@ class LCDGraphic;
 class LCDCore;
 
 class WidgetIcon : public Widget {
-    Q_OBJECT
+    //Q_OBJECT
     Property *visible_;
     int update_;
     int ch_;
@@ -51,7 +50,7 @@ class WidgetIcon : public Widget {
     SpecialChar *bitmap_;
     std::vector<SpecialChar> data_;
     
-    QTimer *timer_;
+    //QTimer *timer_;
 
     void (*Draw)(WidgetIcon *);
 

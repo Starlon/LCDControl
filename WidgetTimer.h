@@ -26,7 +26,6 @@
 
 #include <string>
 #include <json/json.h>
-#include <QTimer>
 
 #include "Widget.h"
 #include "Property.h"
@@ -37,7 +36,7 @@ class LCDCore;
 
 class WidgetTimer : public Widget {
     Property *expression_;
-    QTimer *timer_;
+    //QTimer *timer_;
     int update_;
 
     public:
