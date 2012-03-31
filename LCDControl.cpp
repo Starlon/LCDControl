@@ -66,6 +66,7 @@ void LCDControl::Stop() {
     app_->exit(0);
 }
 
+/*
 void LCDControl::ProcessVariables(Json::Value *config, Evaluator *ev) {
     Json::Value *vars = CFG_Fetch_Raw(config, "variables");
     if(vars) {
@@ -134,6 +135,7 @@ void LCDControl::ProcessVariables(Json::Value *config, Evaluator *ev) {
         delete vars;
     }
 }
+*/
 
 void LCDControl::ConfigSetup() {
     if(!CFG_Get_Root()) return;
