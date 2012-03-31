@@ -21,9 +21,6 @@
  * along with LCDControl.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QString>
-#include <QtScript>
-
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -126,7 +123,7 @@ int PluginNetDev::ParseNetDev()
     return 0;
 }
 
-QScriptValue PluginNetDev::Regex(QString arg1, QString arg2, int arg3)
+double PluginNetDev::Regex(string arg1, string arg2, int arg3)
 {
     std::string dev, key;
     int delay;
@@ -136,8 +133,8 @@ QScriptValue PluginNetDev::Regex(QString arg1, QString arg2, int arg3)
         return -1;
     }
 
-    dev = arg1.toStdString();
-    key = arg2.toStdString();
+    dev = arg1;
+    key = arg2;
     delay = arg3;
 
     value = hash_get_regex(&NetDev, dev.c_str(), key.c_str(), delay);
@@ -145,7 +142,7 @@ QScriptValue PluginNetDev::Regex(QString arg1, QString arg2, int arg3)
     return value;
 }
 
-QScriptValue PluginNetDev::Fast(QString arg1, QString arg2, int arg3)
+double PluginNetDev::Fast(string arg1, string arg2, int arg3)
 {
     std::string dev, key;
     int delay;
@@ -155,13 +152,13 @@ QScriptValue PluginNetDev::Fast(QString arg1, QString arg2, int arg3)
         return -1;
     }
 
-    dev = arg1.toStdString();
-    key = arg2.toStdString();
+    dev = arg1;
+    key = arg2;
     delay = arg3;
 
     value = hash_get_delta(&NetDev, dev.c_str(), key.c_str(), delay);
 
-    return QScriptValue(value);
+    return value;
 }
 
 
@@ -183,10 +180,11 @@ PluginNetDev::~PluginNetDev()
 }
 
 void PluginNetDev::Connect(Evaluator *visitor) {
+/*
     QScriptEngine *engine = visitor->GetEngine();
     QScriptValue val = engine->newObject();
     QScriptValue objVal = engine->newQObject(val, this);
     engine->globalObject().setProperty("netdev", objVal);
+*/
 }
 
-Q_EXPORT_PLUGIN2(_PluginNetDev, PluginNetDev)

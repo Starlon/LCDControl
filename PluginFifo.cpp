@@ -149,7 +149,7 @@ void PluginFifo::StartFifo(void)
 }
 
 
-QString PluginFifo::Fiforead()
+string PluginFifo::Fiforead()
 {
     char buf[FIFO_BUFFER_SIZE];
     unsigned int i;

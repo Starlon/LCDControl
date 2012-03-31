@@ -90,7 +90,7 @@ int PluginDiskstats::ParseDiskstats()
 }
 
 
-double PluginDiskstats::Diskstats(QString arg1, QString arg2, int arg3)
+double PluginDiskstats::Diskstats(string arg1, string arg2, int arg3)
 {
     char dev[256], key[256];
     int delay;

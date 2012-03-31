@@ -26,7 +26,6 @@
 #include <cstring>
 #include <ctype.h>
 #include <errno.h>
-#include <QtScript>
 
 #include "debug.h"
 #include "Hash.h"
@@ -82,15 +81,15 @@ int PluginCpuinfo::ParseCpuinfo(void)
 }
 
 
-char * PluginCpuinfo::Cpuinfo(char * key)
+string * PluginCpuinfo::Cpuinfo(string * key)
 {
     const char *val;
 
     if (ParseCpuinfo() < 0) {
-        return QString("");
+        return "";
     }
 
-    val = hash_get(&CPUinfo, key.toStdString().c_str(), NULL);
+    val = hash_get(&CPUinfo, key.c_str(), NULL);
     if (val == NULL)
         val = "";
     return val;

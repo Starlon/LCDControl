@@ -192,7 +192,7 @@ string PluginUptime::Uptime(string fmt) {
         last_value = now;
     }
 
-    char *buffer = struptime(uptime, fmt.toStdString().c_str());
+    char *buffer = struptime(uptime, fmt.c_str());
     string str = buffer;
     return str;
 }
@@ -215,15 +215,9 @@ double PluginUptime::Uptime() {
     return uptime;
 }
 
-/*
-QScriptValue my_uptime(QScriptContext *ctx, QScriptEngine *eng) {
-    return "Fooball"; //result; //QString("Foo");
-}*/
-
 PluginUptime::PluginUptime() {
     uptime = 0;    
     fd = -2;
-    //visitor->AddAccessor("foo", my_uptime, QScriptValue::PropertyGetter);
 }
 
 PluginUptime::~PluginUptime() {

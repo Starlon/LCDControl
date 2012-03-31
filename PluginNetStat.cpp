@@ -113,15 +113,15 @@ int PluginNetStat::ParseNetStat() {
     return 0;
 }
 
-QString PluginNetStat::Netstat(QString arg1, QString arg2) {
+string PluginNetStat::Netstat(string arg1, string arg2) {
     std::string line, column;
 
     if(ParseNetStat() < 0) {
         return "Error";
     }
 
-    line = arg1.toStdString();
-    column = arg2.toStdString();
+    line = arg1;
+    column = arg2;
 
     const char *val = hash_get(&NetStat, line.c_str(), column.c_str());
 

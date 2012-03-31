@@ -22,7 +22,6 @@
  */
 
 #include <sys/time.h>
-#include <QObject>
 #include <list>
 #include <errno.h>
 
@@ -84,12 +83,12 @@ int PluginExec::DoExec(char *cmd, char *key, int delay) {
     return -1;
 }
 
-QString PluginExec::Exec(QString arg1, int delay)
+string PluginExec::Exec(string arg1, int delay)
 {
     const char *cmd;
     char key[5], *val;
 
-    cmd = arg1.toStdString().c_str();
+    cmd = arg1.c_str();
 
     qprintf(key, sizeof(key), "%x", CRC(cmd));
 
@@ -140,10 +139,12 @@ void PluginExecThread::run() {
 }
 
 void PluginExec::Connect(Evaluator *visitor) {
+/*
     QScriptEngine *engine = visitor->GetEngine();
     QScriptValue val = engine->newObject();
     QScriptValue objVal = engine->newQObject(val, this);
     engine->globalObject().setProperty("exec", objVal);
+*/
 }
 
 void PluginExec::Disconnect() {
@@ -153,4 +154,3 @@ void PluginExec::Disconnect() {
     }
 }
 
-Q_EXPORT_PLUGIN2(_PluginExec, PluginExec)

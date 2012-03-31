@@ -36,7 +36,7 @@ class PluginStatfs {
     void Disconnect() {}
 
     public slots:
-    double Statfs(QString arg1, QString arg2);
+    double Statfs(std::string arg1, std::string arg2);
 };
 
 }; // End namespace

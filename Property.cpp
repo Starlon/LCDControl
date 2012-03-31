@@ -38,6 +38,7 @@ using namespace LCD;
 
 Property::Property(LCDCore *v, Json::Value *section, std::string name, 
     Json::Value *defval) {
+
     visitor_ = v;
     name_ = name;
     is_valid = false;
@@ -45,7 +46,7 @@ Property::Property(LCDCore *v, Json::Value *section, std::string name,
     if( expression_ != NULL && expression_->isString()) {
         result_ = v->Eval(expression_->asCString());
         if( result_.isError() ) {
-            LCDError("Property: %s in \"%s\"", result_.toString().toStdString().c_str(),
+            LCDError("Property: %s in \"%s\"", result_.toString().c_str(),
                 expression_->asCString());
             return;
         }

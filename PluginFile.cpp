@@ -37,15 +37,15 @@ using namespace LCD;
 /* takes two arguments, file name and line number */
 /* returns text of that line */
 
-QString PluginFile::Readline(QString arg1, int arg2) {
+string PluginFile::Readline(string arg1, int arg2) {
     char value[80], val2[80];
     FILE *fp;
     int reqline, i, size;
 
     reqline = arg2;
-    fp = fopen(arg1.toStdString().c_str(), "r");
+    fp = fopen(arg1.c_str(), "r");
     if (!fp) {
-        LCDError("readline couldn't open file '%s'", arg1.toStdString().c_str());
+        LCDError("readline couldn't open file '%s'", arg1.c_str());
         value[0] = '\0';
     } else {
         i = 0;

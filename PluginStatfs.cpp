@@ -34,14 +34,14 @@
 
 using namespace LCD;
 
-double PluginStatfs::Statfs(QString arg1, QString arg2)
+double PluginStatfs::Statfs(string arg1, string arg2)
 {
     struct statfs buf;
     char *path, *key;
     double value;
 
-    path = strdup(arg1.toStdString().c_str());
-    key = strdup(arg2.toStdString().c_str());
+    path = strdup(arg1.c_str());
+    key = strdup(arg2.c_str());
 
     //LCDError("path: %s, key: %s", path, key);
 

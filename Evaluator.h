@@ -22,10 +22,10 @@
 #ifndef __EVALUATOR__
 #define __EVALUATOR__
 
-#include <QtScript>
 #include <string>
 #include <list>
 
+#include "lua.h"
 #include "SpecialChar.h"
 
 
@@ -38,18 +38,22 @@ class Evaluator {
     std::list<PluginInterface *> plugins_;
 
     protected:
+/*
     QObject *obj;
     QScriptEngine *engine_;
+*/
 
     public:
     Evaluator();
-    Evaluator(QScriptEngine *);
+    Evaluator();
     virtual ~Evaluator();
-    virtual QScriptValue Eval(std::string str);
+    virtual std::string Eval(std::string str);
+/*
     void AddAccessor(std::string name, QScriptValue (*func)(QScriptContext *ctx, 
         QScriptEngine *eng), QFlags<QScriptValue::PropertyFlag>);
     void AddValue(std::string, QScriptValue val);
     QScriptEngine *GetEngine() { return engine_; };
+*/
 };
 
 };

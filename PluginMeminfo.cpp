@@ -86,7 +86,7 @@ int PluginMeminfo::ParseMeminfo()
     return 0;
 }
 
-QString PluginMeminfo::Meminfo(QString arg1)
+std::string PluginMeminfo::Meminfo(std::string arg1)
 {
     std::string key;
     const char * val;
@@ -95,7 +95,7 @@ QString PluginMeminfo::Meminfo(QString arg1)
         return "";
     }
 
-    key = arg1.toStdString();
+    key = arg1;
     val = hash_get(&MemInfo, key.c_str(), NULL);
     if (val == NULL)
         val = "";
@@ -121,10 +121,12 @@ PluginMeminfo::~PluginMeminfo(void)
 }
 
 void PluginMeminfo::Connect(Evaluator *visitor) {
+/*
     QScriptEngine *engine = visitor->GetEngine();
     QScriptValue val = engine->newObject();
     QScriptValue objVal = engine->newQObject(val, this);
     engine->globalObject().setProperty("meminfo", objVal);
+*/
 }
 
 Q_EXPORT_PLUGIN2(_PluginMeminfo, PluginMeminfo)

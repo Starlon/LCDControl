@@ -21,7 +21,6 @@
  * along with LCDControl.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QObject>
 #include <stdlib.h>
 #include <unistd.h>
 #include <cstring>
@@ -68,7 +67,7 @@ int PluginNetinfo::OpenNet() {
 }
 
 
-double PluginNetinfo::Exists(QString arg1) {
+double PluginNetinfo::Exists(string arg1) {
     char buf[10240];
     struct ifconf ifcnf;
     struct ifreq *ifreq;
@@ -86,7 +85,7 @@ double PluginNetinfo::Exists(QString arg1) {
     if (ioctl(socknr, SIOCGIFCONF, &ifcnf) < 0) {
         /* Error getting list of devices */
         LCDError("%s: ioctl(IFCONF) for %s failed: %s", "plugin_netinfo", 
-            arg1.toStdString().c_str(), strerror(errno));
+            arg1.c_str(), strerror(errno));
         return value;
     }
     if (0 == ifcnf.ifc_len) {
@@ -96,7 +95,7 @@ double PluginNetinfo::Exists(QString arg1) {
 
     ifreq = (struct ifreq *) buf;
     len = sizeof(struct ifreq);
-    strncpy(devname, arg1.toStdString().c_str(), sizeof(devname));
+    strncpy(devname, arg1.c_str(), sizeof(devname));
 
     while (ifreq && *((char *) ifreq) && ((char *) ifreq) < buf + ifcnf.ifc_len) {
         if (*((char *) ifreq) && strncmp(ifreq->ifr_name, devname, sizeof(devname)) == 0) {
@@ -114,7 +113,7 @@ double PluginNetinfo::Exists(QString arg1) {
 
 
 /* get MAC address (hardware address) of network device */
-QString PluginNetinfo::Hwaddr(QString arg1) {
+string PluginNetinfo::Hwaddr(string arg1) {
     static int errcount = 0;
     struct ifreq ifreq;
     unsigned char *hw;
@@ -125,7 +124,7 @@ QString PluginNetinfo::Hwaddr(QString arg1) {
         return "";
     }
 
-    strncpy(ifreq.ifr_name, arg1.toStdString().c_str(), sizeof(ifreq.ifr_name));
+    strncpy(ifreq.ifr_name, arg1.c_str(), sizeof(ifreq.ifr_name));
     if (ioctl(socknr, SIOCGIFHWADDR, &ifreq) < 0) {
         errcount++;
         if (1 == errcount % 1000) {
@@ -143,7 +142,7 @@ QString PluginNetinfo::Hwaddr(QString arg1) {
 
 
 /* get ip address of network device */
-QString PluginNetinfo::Ipaddr(QString arg1) {
+string PluginNetinfo::Ipaddr(string arg1) {
     static int errcount = 0;
     struct ifreq ifreq;
     struct sockaddr_in *sin;
@@ -154,7 +153,7 @@ QString PluginNetinfo::Ipaddr(QString arg1) {
         return "";
     }
 
-    strncpy(ifreq.ifr_name, arg1.toStdString().c_str(), sizeof(ifreq.ifr_name));
+    strncpy(ifreq.ifr_name, arg1.c_str(), sizeof(ifreq.ifr_name));
     if (ioctl(socknr, SIOCGIFADDR, &ifreq) < 0) {
         errcount++;
         if (1 == errcount % 1000) {
@@ -171,7 +170,7 @@ QString PluginNetinfo::Ipaddr(QString arg1) {
 
 
 /* get ip netmask of network device */
-QString PluginNetinfo::Netmask(QString arg1) {
+string PluginNetinfo::Netmask(string arg1) {
     static int errcount = 0;
     struct ifreq ifreq;
     struct sockaddr_in *sin;
@@ -182,7 +181,7 @@ QString PluginNetinfo::Netmask(QString arg1) {
         return "";
     }
 
-    strncpy(ifreq.ifr_name, arg1.toStdString().c_str(), sizeof(ifreq.ifr_name));
+    strncpy(ifreq.ifr_name, arg1.c_str(), sizeof(ifreq.ifr_name));
     if (ioctl(socknr, SIOCGIFNETMASK, &ifreq) < 0) {
         errcount++;
         if (1 == errcount % 1000) {
@@ -200,7 +199,7 @@ QString PluginNetinfo::Netmask(QString arg1) {
 
 
 /* get ip broadcast address of network device */
-QString PluginNetinfo::Bcaddr(QString arg1) {
+string PluginNetinfo::Bcaddr(string arg1) {
     static int errcount = 0;
     struct ifreq ifreq;
     struct sockaddr_in *sin;
@@ -211,7 +210,7 @@ QString PluginNetinfo::Bcaddr(QString arg1) {
         return "";
     }
 
-    strncpy(ifreq.ifr_name, arg1.toStdString().c_str(), sizeof(ifreq.ifr_name));
+    strncpy(ifreq.ifr_name, arg1.c_str(), sizeof(ifreq.ifr_name));
     if (ioctl(socknr, SIOCGIFBRDADDR, &ifreq) < 0) {
         errcount++;
         if (1 == errcount % 1000) {
@@ -237,10 +236,12 @@ PluginNetinfo::~PluginNetinfo() {
 }
 
 void PluginNetinfo::Connect(Evaluator *visitor) {
+/*
     QScriptEngine *engine = visitor->GetEngine();
     QScriptValue val = engine->newObject();
     QScriptValue objVal = engine->newQObject(val, this);
     engine->globalObject().setProperty("netinfo", objVal);
+*/
 }
 
 Q_EXPORT_PLUGIN2(_PluginNetinfo, PluginNetinfo)

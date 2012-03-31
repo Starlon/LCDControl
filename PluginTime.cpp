@@ -38,22 +38,22 @@ unsigned int PluginTime::Time()
 }
 
 
-QString PluginTime::Strftime(QString arg1, double arg2)
+string PluginTime::Strftime(string arg1, double arg2)
 {
     char value[256];
     time_t t = arg2;
 
     value[0] = '\0';
-    strftime(value, sizeof(value), arg1.toStdString().c_str(), localtime(&t));
+    strftime(value, sizeof(value), arg1.c_str(), localtime(&t));
 
     return value;
 }
 
-QString PluginTime::Strftime_tz(QString arg1, double arg2, QString arg3)
+string PluginTime::Strftime_tz(string arg1, double arg2, string arg3)
 {
     char value[256] = "";
     time_t t = arg2;
-    char *tz = (char *)arg3.toStdString().c_str();
+    char *tz = (char *)arg3.c_str();
     char *old_tz;
 
     old_tz = getenv("TZ");
@@ -69,7 +69,7 @@ QString PluginTime::Strftime_tz(QString arg1, double arg2, QString arg3)
     setenv("TZ", tz, 1);
     tzset();
 
-    strftime(value, sizeof(value), arg1.toStdString().c_str(), localtime(&t));
+    strftime(value, sizeof(value), arg1.c_str(), localtime(&t));
 
     if (old_tz) {
         setenv("TZ", old_tz, 1);

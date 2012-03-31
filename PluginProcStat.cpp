@@ -200,28 +200,28 @@ int PluginProcStat::ParseProcStat(void) {
 }
 
 
-QString PluginProcStat::ProcStat(QString arg1) {
+string PluginProcStat::ProcStat(string arg1) {
     char *string;
 
-    string = hash_get(&Stat, arg1.toStdString().c_str(), NULL);
+    string = hash_get(&Stat, arg1.c_str(), NULL);
     if (string == NULL)
         string = const_cast<char *>("");
     return string;
 }
 
-double PluginProcStat::ProcStat(QString arg1, double arg2)
+double PluginProcStat::ProcStat(string arg1, double arg2)
 {
     double number;
 
-    number = hash_get_delta(&Stat, arg1.toStdString().c_str(), 
+    number = hash_get_delta(&Stat, arg1.c_str(), 
         NULL, arg2);
     return number;
 }
 
 
-double PluginProcStat::Cpu(QString arg1, int arg2) {
+double PluginProcStat::Cpu(string arg1, int arg2) {
     //const char *key;
-    std::string key = arg1.toStdString();
+    std::string key = arg1();
     int delay = arg2;
     double value;
     double cpu_user, cpu_nice, cpu_system, cpu_idle, cpu_total;
@@ -271,7 +271,7 @@ double PluginProcStat::Cpu(QString arg1, int arg2) {
 }
 
 
-double PluginProcStat::Disk(QString arg1, QString arg2, double arg3) {
+double PluginProcStat::Disk(string arg1, string arg2, double arg3) {
     const char *dev, *key;
     char buffer[32];
     int delay;
@@ -282,8 +282,8 @@ double PluginProcStat::Disk(QString arg1, QString arg2, double arg3) {
         return 0;
     }
 
-    dev = arg1.toStdString().c_str();
-    key = arg2.toStdString().c_str();
+    dev = arg1.c_str();
+    key = arg2.c_str();
     delay = arg3;
 
     qprintf(buffer, sizeof(buffer), "disk_io\\.%s\\.%s", dev, key);

@@ -32,13 +32,13 @@
 
 using namespace LCD;
 
-QString PluginUname::Uname(QString arg1)
+string PluginUname::Uname(string arg1)
 {
     struct utsname utsbuf;
     std::string key;
     const char *value;
 
-    key = arg1.toStdString();
+    key = arg1;
 
     if (uname(&utsbuf) != 0) {
         LCDError("uname() failed: %s", strerror(errno));

@@ -41,25 +41,25 @@ void PluginLCD::Transition(int i) {
     visitor_->Transition(i);
 }
 
-void PluginLCD::SelectLayout(QString layout) {
+void PluginLCD::SelectLayout(string layout) {
     if(type_ == LCD_TEXT) 
-        visitor_->SelectLayout(layout.toStdString());
+        visitor_->SelectLayout(layout);
     else if(type_ == LCD_GRAPHIC)
-        visitor_->SelectLayout(layout.toStdString());
+        visitor_->SelectLayout(layout);
 }
 
-int PluginLCD::RemoveWidget(QString widget) {
-    return visitor_->RemoveWidget(widget.toStdString());
+int PluginLCD::RemoveWidget(string widget) {
+    return visitor_->RemoveWidget(widget);
 }
 
-QString PluginLCD::AddWidget(QString layout, 
-    int row, int col, int layer, QString object) {
-    return QString(visitor_->AddWidget(layout.toStdString(), row, col, 
-        layer, object.toStdString()).c_str());
+string PluginLCD::AddWidget(string layout, 
+    int row, int col, int layer, string object) {
+    return string(visitor_->AddWidget(layout, row, col, 
+        layer, object).c_str());
 }
 
-int PluginLCD::MoveWidget(QString widget, int rows, int cols) {
-    return visitor_->MoveWidget(widget.toStdString(), rows, cols);
+int PluginLCD::MoveWidget(string widget, int rows, int cols) {
+    return visitor_->MoveWidget(widget, rows, cols);
 }
 
 int PluginLCD::ResizeLCD(int rows, int cols) {
@@ -67,7 +67,7 @@ int PluginLCD::ResizeLCD(int rows, int cols) {
 }
 
 void PluginLCD::SendData(int row, int col, 
-    int layer, QString val) {
+    int layer, string val) {
     QByteArray data = val.toAscii();
     if(type_ == LCD_TEXT) {
         LCDText *lcd = (LCDText *)visitor_->GetLCD();
@@ -95,7 +95,7 @@ void PluginLCD::SendData(int row, int col,
 		LCDError("PluginLCD::SendData: Invalid layer");
 		return;
 	}
-	lcd->GraphicRender(layer, row, col, fg_, bg_, val.toStdString().c_str(), 0, 0, GetCurrentLayout().toStdString().c_str());
+	lcd->GraphicRender(layer, row, col, fg_, bg_, val.c_str(), 0, 0, GetCurrentLayout().c_str());
 	lcd->GraphicBlit(0, 0, lcd->LROWS, lcd->LCOLS); 
     }
 }
@@ -132,7 +132,7 @@ void PluginLCD::ClearChars() {
         ((LCDText *)visitor_->GetLCD())->TextClearChars();
 }
 
-QString PluginLCD::GetCurrentLayout() {
+string PluginLCD::GetCurrentLayout() {
     return visitor_->GetCurrentLayout().c_str();
 }
 
@@ -160,7 +160,7 @@ int PluginLCD::GetYres() {
     return visitor_->GetLCD()->YRES;
 }
 
-QString PluginLCD::GetType() {
+string PluginLCD::GetType() {
 	if ( type_ == LCD_TEXT ) {
 		return "text";
 	} else if (type_ == LCD_GRAPHIC) {

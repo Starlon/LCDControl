@@ -36,7 +36,7 @@ class PluginFile {
     void Disconnect() {}
 
     public slots:
-    char *Readline(QString arg1, int arg2);
+    char *Readline(std::string arg1, int arg2);
 };
 
 }; // End namespace

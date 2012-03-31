@@ -46,8 +46,8 @@ class PluginNetDev {
     void Disconnect() {}
 
     public slots:
-    char *Regex(QString arg1, QString arg2, int arg3);
-    char *Fast(QString arg1, QString arg2, int arg3);
+    string Regex(string arg1, string arg2, int arg3);
+    string Fast(string arg1, string arg2, int arg3);
 };
 
 };
